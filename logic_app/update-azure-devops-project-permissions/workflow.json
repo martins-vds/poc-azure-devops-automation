@@ -1,0 +1,233 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "actions": {
+            "Complete_Request": {
+                "inputs": {
+                    "body": {
+                        "apps_azuredevopsprojectrequest_projecturl": "@body('New_Project_Details')?['_links']?['web']?['href']",
+                        "cre18_azuredevopsprojectrequest_requeststatus": 935000004
+                    },
+                    "headers": {
+                        "accept": "application/json;odata.metadata=full",
+                        "organization": "https://csapps.crm.dynamics.com",
+                        "prefer": "return=representation,odata.include-annotations=*"
+                    },
+                    "host": {
+                        "connection": {
+                            "referenceName": "commondataservice"
+                        }
+                    },
+                    "method": "patch",
+                    "path": "/api/data/v9.1/@{encodeURIComponent(encodeURIComponent('cre18_azuredevopsprojectrequests'))}(@{encodeURIComponent(encodeURIComponent(triggerBody()?['cre18_azuredevopsprojectrequestid']))})"
+                },
+                "runAfter": {
+                    "Remove_Permissions_to_Create_Repositories": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ApiConnection"
+            },
+            "Get_or_Create_Project": {
+                "inputs": {
+                    "body": {
+                        "organization": "@{triggerBody()?['cre18_azuredevopsprojectrequest_organization']}",
+                        "processTemplateId": "@{triggerBody()?['cre18_azuredevopsprojectrequest_processtemplate']}",
+                        "project": "@{triggerBody()?['cre18_azuredevopsprojectrequest_project']}"
+                    },
+                    "function": {
+                        "connectionName": "azureFunctionOperation"
+                    },
+                    "method": "POST"
+                },
+                "runAfter": {
+                    "Set_Request_Status_to_Active": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Function"
+            },
+            "New_Project_Details": {
+                "inputs": {
+                    "content": "@body('Get_or_Create_Project')",
+                    "schema": {
+                        "properties": {
+                            "_links": {
+                                "properties": {
+                                    "collection": {
+                                        "properties": {
+                                            "href": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "self": {
+                                        "properties": {
+                                            "href": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    },
+                                    "web": {
+                                        "properties": {
+                                            "href": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "defaultTeam": {
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "url": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "string"
+                            },
+                            "lastUpdateTime": {
+                                "type": "string"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "revision": {
+                                "type": "integer"
+                            },
+                            "state": {
+                                "type": "string"
+                            },
+                            "url": {
+                                "type": "string"
+                            },
+                            "visibility": {
+                                "type": "string"
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "runAfter": {
+                    "Get_or_Create_Project": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "ParseJson"
+            },
+            "Remove_Permissions_to_Create_Repositories": {
+                "inputs": {
+                    "body": {
+                        "organization": "@{triggerBody()?['cre18_azuredevopsprojectrequest_organization']}",
+                        "project": "@{triggerBody()?['cre18_azuredevopsprojectrequest_project']}"
+                    },
+                    "function": {
+                        "connectionName": "azureFunctionOperation-2"
+                    },
+                    "method": "POST"
+                },
+                "runAfter": {
+                    "New_Project_Details": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "type": "Function"
+            },
+            "Set_Request_Status_to_Active": {
+                "inputs": {
+                    "body": {
+                        "cre18_azuredevopsprojectrequest_requeststatus": 935000001
+                    },
+                    "headers": {
+                        "accept": "application/json;odata.metadata=full",
+                        "organization": "https://csapps.crm.dynamics.com",
+                        "prefer": "return=representation,odata.include-annotations=*"
+                    },
+                    "host": {
+                        "connection": {
+                            "referenceName": "commondataservice"
+                        }
+                    },
+                    "method": "patch",
+                    "path": "/api/data/v9.1/@{encodeURIComponent(encodeURIComponent('cre18_azuredevopsprojectrequests'))}(@{encodeURIComponent(encodeURIComponent(triggerBody()?['cre18_azuredevopsprojectrequestid']))})"
+                },
+                "runAfter": {},
+                "type": "ApiConnection"
+            },
+            "Set_Request_Status_to_Error": {
+                "inputs": {
+                    "body": {
+                        "cre18_azuredevopsprojectrequest_requeststatus": 935000005
+                    },
+                    "headers": {
+                        "accept": "application/json;odata.metadata=full",
+                        "organization": "https://csapps.crm.dynamics.com",
+                        "prefer": "return=representation,odata.include-annotations=*"
+                    },
+                    "host": {
+                        "connection": {
+                            "referenceName": "commondataservice"
+                        }
+                    },
+                    "method": "patch",
+                    "path": "/api/data/v9.1/@{encodeURIComponent(encodeURIComponent('cre18_azuredevopsprojectrequests'))}(@{encodeURIComponent(encodeURIComponent(triggerBody()?['cre18_azuredevopsprojectrequestid']))})"
+                },
+                "runAfter": {
+                    "Get_or_Create_Project": [
+                        "FAILED",
+                        "SKIPPED"
+                    ],
+                    "Remove_Permissions_to_Create_Repositories": [
+                        "SKIPPED",
+                        "FAILED"
+                    ]
+                },
+                "type": "ApiConnection"
+            }
+        },
+        "contentVersion": "1.0.0.0",
+        "outputs": {},
+        "triggers": {
+            "When_a_row_is_added,_modified_or_deleted_(preview)": {
+                "inputs": {
+                    "body": {
+                        "entityname": "cre18_azuredevopsprojectrequest",
+                        "message": 1,
+                        "scope": 4,
+                        "url": "@{listCallbackUrl()}",
+                        "version": 1
+                    },
+                    "headers": {
+                        "Consistency": "Strong",
+                        "catalog": "all",
+                        "category": "all",
+                        "organization": "https://csapps.crm.dynamics.com"
+                    },
+                    "host": {
+                        "connection": {
+                            "referenceName": "commondataservice-2"
+                        }
+                    },
+                    "path": "/api/data/v9.1/callbackregistrations"
+                },
+                "type": "ApiConnectionWebhook"
+            }
+        }
+    },
+    "kind": "Stateful"
+}

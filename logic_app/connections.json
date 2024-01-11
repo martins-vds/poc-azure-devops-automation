@@ -1,0 +1,54 @@
+{
+  "functionConnections": {
+      "azureFunctionOperation": {
+          "authentication": {
+              "name": "Code",
+              "type": "QueryString",
+              "value": "@appsetting('azureFunctionOperation_functionAppKey')"
+          },
+          "displayName": "createprojects",
+          "function": {
+              "id": "/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/resourceGroups/rg-poc-azure-devops-automation/providers/Microsoft.Web/sites/poc-azure-devops-automation-1/functions/create-project"
+          },
+          "triggerUrl": "https://poc-azure-devops-automation-1.azurewebsites.net/api/create-project"
+      },
+      "azureFunctionOperation-2": {
+          "authentication": {
+              "name": "Code",
+              "type": "QueryString",
+              "value": "@appsetting('azureFunctionOperation_12_functionAppKey')"
+          },
+          "displayName": "denyprojectpermission",
+          "function": {
+              "id": "/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/resourceGroups/rg-poc-azure-devops-automation/providers/Microsoft.Web/sites/poc-azure-devops-automation-1/functions/deny-project-creation-permissions"
+          },
+          "triggerUrl": "https://poc-azure-devops-automation-1.azurewebsites.net/api/deny-project-creation-permissions"
+      }
+  },
+  "managedApiConnections": {
+      "commondataservice": {
+          "api": {
+              "id": "/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/providers/Microsoft.Web/locations/westus3/managedApis/commondataservice"
+          },
+          "authentication": {
+              "type": "ManagedServiceIdentity"
+          },
+          "connection": {
+              "id": "/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/resourceGroups/rg-poc-azure-devops-automation/providers/Microsoft.Web/connections/commondataservice-3"
+          },
+          "connectionRuntimeUrl": "https://9c0696b1b877c451.14.common.logic-westus3.azure-apihub.net/apim/commondataservice/b7f0008db7204b49a7d05b8ffe75fea9"
+      },
+      "commondataservice-2": {
+          "api": {
+              "id": "/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/providers/Microsoft.Web/locations/westus3/managedApis/commondataservice"
+          },
+          "authentication": {
+              "type": "ManagedServiceIdentity"
+          },
+          "connection": {
+              "id": "/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/resourceGroups/rg-poc-azure-devops-automation/providers/Microsoft.Web/connections/commondataservice"
+          },
+          "connectionRuntimeUrl": "https://9c0696b1b877c451.14.common.logic-westus3.azure-apihub.net/apim/commondataservice/68c26e4bb3d94542a0ccce590b735792"
+      }
+  }
+}

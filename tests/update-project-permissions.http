@@ -1,0 +1,7 @@
+POST http://localhost:7071/api/deny-project-creation-permissions
+content-type: application/json
+
+{
+    "organization": "vinima",
+    "project": "NewScrum"    
+}
