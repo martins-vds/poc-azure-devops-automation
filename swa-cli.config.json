@@ -2,7 +2,7 @@
   "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
   "configurations": {
     "poc-azure-devops-automation": {
-      "appLocation": "ui",
+      "appLocation": "app",
       "apiLocation": "api",
       "outputLocation": "dist",
       "dataApiLocation": "swa-db-connections",
