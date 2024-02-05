@@ -12,5 +12,6 @@
     },
     "omnisharp.dotNetCliPaths": [
         "C:\\Users\\vinima\\.azurelogicapps\\dependencies\\DotNetSDK"
-    ]
+    ],
+    "azurite.location": "C:\\Users\\vinima\\.azurelogicapps\\.azurite"
 }

@@ -1,7 +1,2 @@
-POST http://localhost:7071/api/deny-project-creation-permissions
+DELETE http://localhost:7071/api/organizations/vinima-contoso/projects/NewScrum4/permissions
 content-type: application/json
-
-{
-    "organization": "vinima",
-    "project": "NewScrum"    
-}

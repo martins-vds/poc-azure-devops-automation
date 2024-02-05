@@ -1,8 +1,7 @@
-POST http://localhost:7071/api/create-project
+POST http://localhost:7071/api/organizations/vinima-contoso/projects
 content-type: application/json
 
-{
-    "organization": "vinima",
-    "project": "NewScrum4",
-    "processTemplateId": "6b724908-ef14-45cf-84f8-768b5384da45"
+{    
+    "projectName": "NewScrum4",
+    "processId": "adcc42ab-9882-485e-a3ed-7678f01f66bc"
 }
