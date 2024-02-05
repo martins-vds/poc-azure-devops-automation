@@ -17,7 +17,8 @@
 				"github.copilot-chat",
 				"github.copilot",
 				"ms-vscode.powershell",
-				"ms-azuretools.vscode-azurestaticwebapps"
+				"ms-azuretools.vscode-azurestaticwebapps",
+				"github.vscode-github-actions"
 			]
 		}
 	}
