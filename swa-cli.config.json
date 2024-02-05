@@ -5,7 +5,6 @@
       "appLocation": "app",
       "apiLocation": "api",
       "outputLocation": "dist",
-      "dataApiLocation": "swa-db-connections",
       "apiLanguage": "node",
       "apiVersion": "18",
       "appBuildCommand": "npm run build",
