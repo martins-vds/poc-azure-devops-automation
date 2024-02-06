@@ -103,7 +103,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v1
     - name: Package logic
-      run: (cd logic_app; mkdir -p ../output; zip -r ../output/logic.zip .)
+      run: (cd logic_app; mkdir -p ../output; zip -r ../output/logic_app.zip .)
     - name: Upload app zip package
       uses: actions/upload-artifact@v2
       with:
@@ -147,7 +147,7 @@ jobs:
       id: la
       with:
         app-name: ${{ vars.RG_LA }}
-        package: './output/logic.zip'
+        package: './output/logic_app.zip'
         publish-profile: ${{steps.publishprofile.outputs.profile}}
 
     - name: Swap parameter files 
