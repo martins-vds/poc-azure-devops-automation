@@ -36,9 +36,7 @@ jobs:
         npm run build --if-present
         npm run test --if-present
         mkdir -p ../output
-        pushd dist
-        zip -r ../../output/api.zip .
-        popd
+        zip -r ../output/api.zip ./dist/*
         popd
   
     - name: Upload app zip package
@@ -147,7 +145,7 @@ jobs:
       uses: Azure/functions-action@v1.5.1
       id: la
       with:
-        app-name: ${{ vars.RG_LA }}
+        app-name: ${{ vars.LA_NAME }}
         package: './output/logic_app.zip'
         publish-profile: ${{secrets.publishprofile.outputs.profile}}
 
