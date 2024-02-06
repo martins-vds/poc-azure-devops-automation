@@ -4,5 +4,9 @@
         "value": {
             "type": "ManagedServiceIdentity"
         }
+    },
+    "function_key": {
+      "type": "String",
+      "value": "@appsetting('azureFunctionOperation_functionAppKey')"
     }
 }
