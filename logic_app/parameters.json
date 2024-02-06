@@ -1,0 +1,14 @@
+{
+  "blob_auth": {
+    "type": "object",
+    "value": {
+      "type": "Raw",
+      "scheme": "Key",
+      "parameter": "@appsetting('azurequeues-2-connectionKey')"
+    }
+  },
+  "function_key": {
+    "type": "String",
+    "value": "@appsetting('azureFunctionOperation_functionAppKey')"
+  }
+}

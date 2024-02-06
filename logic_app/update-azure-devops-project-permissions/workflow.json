@@ -144,7 +144,7 @@
             "Create_Or_Update_Project": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations@{body('Project_Request')?['organization']}/projects?code=WczMgMh55BaQHBK0WV5lwajoh9CQDsNjsYo-lu7pJrNOAzFuZcum4g==",
+                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations@{body('Project_Request')?['organization']}/projects?code=@{parameters('function_key')}",
                     "method": "POST",
                     "body": {
                         "project": "@{body('Project_Request')?['project']}",
@@ -165,7 +165,7 @@
             "Remove_Permissions_to_Create_Repositories": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations/@{body('Project_Request')?['organization']}/projects/@{body('Project_Request')?['project']}/permissions?code=hnJEHBz2Bd7jkNpYsfsNi3QZyGX8nsXVf75VCy7IQaMRAzFu4EicwA==",
+                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations/@{body('Project_Request')?['organization']}/projects/@{body('Project_Request')?['project']}/permissions?code=@{parameters('function_key')}",
                     "method": "DELETE"
                 },
                 "runAfter": {
