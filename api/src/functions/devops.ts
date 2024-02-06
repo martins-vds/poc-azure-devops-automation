@@ -51,8 +51,9 @@ async function getProcessTemplates(request: HttpRequest, context: InvocationCont
 };
 
 async function requestNewProject(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-    const org = request.params.organization;
     const payload = (await request.json() as any);
+
+    const org = payload.organization;
     const project = payload.projectName;
     const processId = payload.processId;
 
@@ -92,17 +93,16 @@ async function projectRequests(request: HttpRequest, context: InvocationContext)
 }
 
 async function updateProjectRequest(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-    const org = request.params.organization;
     const requestId = request.params.requestId;
-    const updated = <ProjectRequest>(await request.json());
+    const payload = <ProjectRequest>(await request.json());
 
-    tableInput.filter = `partitionKey eq '${org}' and rowKey eq '${requestId}'`;
+    tableInput.filter = `rowKey eq '${requestId}'`;
     tableInput.take = 1;
 
     const projectRequest = <ProjectRequest>(await context.extraInputs.get(tableInput))[0];
 
     if (projectRequest) {
-        const newStatus = updated.status;
+        const { url: updatedUrl, status: updatedStatus } = payload;
 
         const { PartitionKey, RowKey, ...existing } = projectRequest;
 
@@ -110,7 +110,8 @@ async function updateProjectRequest(request: HttpRequest, context: InvocationCon
             partitionKey: projectRequest.PartitionKey,
             rowKey: projectRequest.RowKey,
             ...existing,
-            ...updated
+            url: updatedUrl,
+            status: updatedStatus
         }, "Merge");
     }
 
@@ -156,21 +157,21 @@ app.http('processes', {
 
 app.http('requestProject', {
     methods: ['POST'],
-    route: 'organizations/{organization}/project-requests',
+    route: 'project-requests',
     handler: requestNewProject,
     extraOutputs: [tableOutput, queueOutput],
 });
 
 app.http('projectRequests', {
     methods: ['GET'],
-    route: 'organizations/{organization}/project-requests',
+    route: 'project-requests',
     handler: projectRequests,
     extraInputs: [tableInput],
 });
 
 app.http('updateRequestProject', {
     methods: ['PATCH'],
-    route: 'organizations/{organization}/project-requests/{requestId}',
+    route: 'project-requests/{requestId}',
     handler: updateProjectRequest,
     extraInputs: [tableInput]
 });

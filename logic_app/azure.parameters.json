@@ -7,6 +7,10 @@
     },
     "function_key": {
       "type": "String",
-      "value": "@appsetting('azureFunctionOperation_functionAppKey')"
+      "value": "@appsetting('function_key')"
+    },
+    "function_url": {
+      "type": "String",
+      "value": "@appsetting('function_url')"
     }
 }

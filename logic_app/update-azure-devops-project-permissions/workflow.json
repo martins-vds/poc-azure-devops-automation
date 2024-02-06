@@ -124,7 +124,7 @@
             "Set_Request_Status_to_In_Progress": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations@{body('Project_Request')?['organization']}/project-requests@{body('Project_Request')?['id']}",
+                    "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['id']}",
                     "method": "PATCH",
                     "body": {
                         "status": "In Progress"
@@ -144,7 +144,7 @@
             "Create_Or_Update_Project": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations@{body('Project_Request')?['organization']}/projects?code=@{parameters('function_key')}",
+                    "uri": "@{parameters('function_url')}/api/organizations/@{body('Project_Request')?['organization']}/projects?code=@{parameters('function_key')}",
                     "method": "POST",
                     "body": {
                         "project": "@{body('Project_Request')?['project']}",
@@ -165,7 +165,7 @@
             "Remove_Permissions_to_Create_Repositories": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations/@{body('Project_Request')?['organization']}/projects/@{body('Project_Request')?['project']}/permissions?code=@{parameters('function_key')}",
+                    "uri": "@{parameters('function_url')}/api/organizations/@{body('Project_Request')?['organization']}/projects/@{body('Project_Request')?['project']}/permissions?code=@{parameters('function_key')}",
                     "method": "DELETE"
                 },
                 "runAfter": {
@@ -182,7 +182,7 @@
             "Complete_Request": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations@{body('Project_Request')?['organization']}/project-requests@{body('Project_Request')?['id']}?",
+                    "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['id']}",
                     "method": "PATCH",
                     "body": {
                         "status": "Completed",
@@ -203,7 +203,7 @@
             "Set_Request_Status_to_Error": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations@{body('Project_Request')?['organization']}/project-requests/@{body('Project_Request')?['id']}",
+                    "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['id']}",
                     "method": "POST",
                     "body": {
                         "status": "Failed"
