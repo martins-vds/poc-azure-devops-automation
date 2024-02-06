@@ -36,7 +36,9 @@ jobs:
         npm run build --if-present
         npm run test --if-present
         mkdir -p ../output
-        zip -r ../output/api.zip ./dist/*
+        pushd dist
+        zip -r ../../output/api.zip .
+        popd
         popd
   
     - name: Upload app zip package
