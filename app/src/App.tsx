@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Container, CssBaseline, Divider, FormControl, InputLabel, Link, MenuItem, Paper, Select, SelectChangeEvent, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material'
+import { Button, Container, CssBaseline, Divider, FormControl, InputLabel, Link, MenuItem, Paper, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material'
 import './App.css'
 import { Organization, Process, ProjectRequest, api } from './api'
 
