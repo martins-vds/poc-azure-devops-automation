@@ -36,6 +36,7 @@ jobs:
         npm run build --if-present
         npm run test --if-present
         mkdir -p ../output
+        cp host.json package.json package-lock.json tsconfig.json ../output/
         zip -r ../output/api.zip ./dist/*
         popd
   
