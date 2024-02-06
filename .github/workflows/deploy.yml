@@ -138,7 +138,6 @@ jobs:
           $profile = Get-AzWebAppPublishingProfile `
               -ResourceGroupName ${{ vars.RG_LA }} `
               -Name ${{ vars.LA_NAME }}
-              -Format WebDeploy
           $profile = $profile.Replace("`r", "").Replace("`n", "")
           Write-Output "::set-output name=profile::$profile"
         azPSVersion: latest
