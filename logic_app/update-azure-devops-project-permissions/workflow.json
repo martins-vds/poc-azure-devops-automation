@@ -234,7 +234,7 @@
                 "inputs": {
                     "host": {
                         "connection": {
-                            "referenceName": "azurequeues-2"
+                            "referenceName": "azurequeues"
                         }
                     },
                     "method": "get",

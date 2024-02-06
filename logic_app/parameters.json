@@ -4,11 +4,11 @@
     "value": {
       "type": "Raw",
       "scheme": "Key",
-      "parameter": "@appsetting('azurequeues-2-connectionKey')"
+      "parameter": "@appsetting('azurequeues-connectionKey')"
     }
   },
   "function_key": {
     "type": "String",
-    "value": "@appsetting('azureFunctionOperation_functionAppKey')"
+    "value": "@appsetting('function_key')"
   }
 }

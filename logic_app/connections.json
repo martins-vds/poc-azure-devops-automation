@@ -1,27 +1,14 @@
 {
-  "functionConnections": {
-    "azureFunctionOperation": {
-      "function": {
-        "id": "/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/resourceGroups/rg-poc-azure-devops-automation/providers/Microsoft.Web/sites/poc-azure-devops-automation/functions/updateRequestProject"
-      },
-      "triggerUrl": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations/{organization}/project-requests/{requestid}",
-      "authentication": {
-        "type": "QueryString",
-        "name": "Code",
-        "value": "@appsetting('azureFunctionOperation_functionAppKey')"
-      },
-      "displayName": "UpdateProjectRequest"
-    }
-  },
+  "functionConnections": {},
   "managedApiConnections": {
-    "azurequeues-2": {
+    "azurequeues": {
       "api": {
         "id": "/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/providers/Microsoft.Web/locations/westus3/managedApis/azurequeues"
       },
       "connection": {
-        "id": "/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/resourceGroups/rg-poc-azure-devops-automation/providers/Microsoft.Web/connections/azurequeues-4"
+        "id": "/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/resourceGroups/rg-poc-azure-devops-automation/providers/Microsoft.Web/connections/azurequeues"
       },
-      "connectionRuntimeUrl": "https://9c0696b1b877c451.14.common.logic-westus3.azure-apihub.net/apim/azurequeues/9ee7042d6db944bebc8cc6422dad3480/",
+      "connectionRuntimeUrl": "https://9c0696b1b877c451.14.common.logic-westus3.azure-apihub.net/apim/azurequeues/5457c48b5c8445bc9f725260e7b66b59/",
       "authentication": "@parameters('blob_auth')"
     }
   }
