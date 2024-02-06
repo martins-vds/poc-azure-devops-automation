@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, Button, Container, CssBaseline, FormControl, InputLabel, Link, MenuItem, Select, SelectChangeEvent, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material'
+import { Button, Container, CssBaseline, Divider, FormControl, InputLabel, Link, MenuItem, Paper, Select, SelectChangeEvent, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material'
 import './App.css'
 import { Organization, Process, ProjectRequest, api } from './api'
 
@@ -30,6 +30,15 @@ function App() {
     } catch {
       console.error('Error fetching requests')
       setRequests([])
+    }
+  }
+
+  const handleSubmit = async () => {
+    try {
+      await api.submitProjectRequest(organization, process, projectName)
+      setRefreshTable(true)
+    } catch {
+      console.error('Error creating project request')
     }
   }
 
@@ -79,24 +88,21 @@ function App() {
     fetchProcessess()
   }, [organization])
 
-  const handleSubmit = async () => {
-    try {
-      await api.submitProjectRequest(organization, process, projectName)
-      setRefreshTable(true)
-    } catch {
-      console.error('Error creating project request')
-    }
-  }
-
   return (
     <>
       <CssBaseline />
       <Container maxWidth={false} sx={{
         width: '50vw',
+        height: '100vh',
         display: 'flex',
         flexDirection: 'column',
         backgroundColor: "white",
       }}>
+        <Typography variant="h6" sx={{
+          marginTop: '20px',
+        }} align='left'>
+          Submit Project Request
+        </Typography>
         <FormControl sx={{
           width: '200px',
         }}>
@@ -139,6 +145,7 @@ function App() {
           </Select>
         </FormControl>
         <FormControl sx={{
+          width: '200px',
           marginTop: '20px'
         }}>
           <TextField
@@ -152,16 +159,17 @@ function App() {
         <FormControl sx={{
           marginTop: '20px'
         }}>
-          <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+          <Button variant="contained" onClick={handleSubmit} fullWidth={false}>Submit</Button>
         </FormControl>
+        <Divider variant='fullWidth' />
         <Typography variant="h6" sx={{
           marginTop: '20px',
-        }}>
+        }} align='left'>
           Project Requests
         </Typography>
         <TableContainer sx={{
           marginTop: '20px'
-        }}>
+        }} component={Paper} variant='outlined'>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
               <TableRow>

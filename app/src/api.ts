@@ -32,7 +32,7 @@ async function getProjectRequests(): Promise<ProjectRequest[]> {
     return response.json();
 }
 
-async function submitProjectRequest(organization: string, projectName: string, processId: string): Promise<void> {
+async function submitProjectRequest(organization: string, processId: string, projectName: string): Promise<void> {
     const response = await fetch(`${BASE_URL}/api/project-requests`, {
         method: 'POST',
         headers: {

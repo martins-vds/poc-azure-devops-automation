@@ -88,7 +88,7 @@
             "Project_Request": {
                 "type": "ParseJson",
                 "inputs": {
-                    "content": "@triggerBody()",
+                    "content": "@triggerBody()?['MessageText']",
                     "schema": {
                         "type": "object",
                         "properties": {
