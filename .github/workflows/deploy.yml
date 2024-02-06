@@ -37,12 +37,10 @@ jobs:
         popd    
 
     - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@v1.5.1
-      id: fa
+      uses: azure/CLI@v1.0.9
       with:
-        app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
-        package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-        publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+        inlineScript: |
+          az functionapp deployment source config-zip --resource-group ${{ vars.RG_FUNCTION_APP }} --name ${{ vars.AZURE_FUNCTIONAPP_NAME }} --src ./${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }} --build-remote false
 
   build_and_deploy_swa:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
