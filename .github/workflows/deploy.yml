@@ -20,10 +20,10 @@ jobs:
     environment: production
     steps:
     - name: 'Checkout GitHub Action'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4.1.1
 
     - name: Setup Node ${{ env.NODE_VERSION }} Environment
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4.0.1
       with:
         node-version: ${{ env.NODE_VERSION }}
 
@@ -37,7 +37,7 @@ jobs:
         popd    
 
     - name: 'Run Azure Functions Action'
-      uses: Azure/functions-action@v1
+      uses: Azure/functions-action@v1.5.1
       id: fa
       with:
         app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
@@ -50,7 +50,7 @@ jobs:
     needs: [build_and_deploy_function]
     name: Build and Deploy Job
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4.1.1
         with:
           submodules: true
           lfs: false
@@ -85,11 +85,12 @@ jobs:
     needs: [build_and_deploy_function]
     steps: 
     - name: Checkout
-      uses: actions/checkout@v1
+      uses: actions/checkout@v4.1.1
     - name: Package logic
       run: (cd logic_app; mkdir -p ../output; zip -r ../output/logic_app.zip .)
+    
     - name: Upload app zip package
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4.3.1
       with:
         name: logic_app
         path: ./output/
@@ -103,20 +104,20 @@ jobs:
       name: production
     steps: 
     - name: Checkout
-      uses: actions/checkout@v1    
+      uses: actions/checkout@v4.1.1    
     - name: Login via Az module
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         enable-AzPSSession: true 
-    - uses: actions/download-artifact@master
+    - uses: actions/download-artifact@v4.1.2
       with:
         name: logic_app
         path: ./output/
         
     - name: Get publish Profile
       id: publishprofile
-      uses: azure/powershell@v1
+      uses: azure/powershell@v1.4.0
       with:
         inlineScript: |
           $profile = Get-AzWebAppPublishingProfile `
@@ -127,7 +128,7 @@ jobs:
         azPSVersion: latest
 
     - name: Deploy to Azure Logic App
-      uses: Azure/functions-action@v1.3.1
+      uses: Azure/functions-action@v1.5.1
       id: la
       with:
         app-name: ${{ vars.RG_LA }}
@@ -136,7 +137,7 @@ jobs:
 
     - name: Swap parameter files 
       id: params
-      uses: azure/CLI@v1
+      uses: azure/CLI@v1.0.9
       with:
         inlineScript: |
           az functionapp deploy --resource-group ${{ vars.RG_LA }} --name ${{ vars.LA_NAME }} --src-path  logic_app/azure.parameters.json --type static --target-path parameters.json
