@@ -19,7 +19,8 @@
 				"ms-vscode.powershell",
 				"ms-azuretools.vscode-azurestaticwebapps",
 				"github.vscode-github-actions",
-				"redhat.vscode-yaml"
+				"redhat.vscode-yaml",
+				"ms-azuretools.vscode-bicep"
 			]
 		}
 	}
