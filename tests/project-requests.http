@@ -1,0 +1,2 @@
+GET http://localhost:7071/api/organizations/vinima-contoso/project-requests/
+content-type: application/json

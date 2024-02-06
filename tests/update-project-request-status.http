@@ -1,0 +1,7 @@
+PATCH http://localhost:7071/api/organizations/vinima-contoso/project-requests/374ea8f2-db34-4276-b6ee-65ebfbf8af1e
+content-type: application/json
+
+{    
+    "status": "Approved",
+    "url": "http://localhost"
+}

@@ -2,54 +2,10 @@
     "definition": {
         "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
         "actions": {
-            "Complete_Request": {
-                "inputs": {
-                    "body": {
-                        "apps_azuredevopsprojectrequest_projecturl": "@body('New_Project_Details')?['_links']?['web']?['href']",
-                        "cre18_azuredevopsprojectrequest_requeststatus": 935000004
-                    },
-                    "headers": {
-                        "accept": "application/json;odata.metadata=full",
-                        "organization": "https://csapps.crm.dynamics.com",
-                        "prefer": "return=representation,odata.include-annotations=*"
-                    },
-                    "host": {
-                        "connection": {
-                            "referenceName": "commondataservice"
-                        }
-                    },
-                    "method": "patch",
-                    "path": "/api/data/v9.1/@{encodeURIComponent(encodeURIComponent('cre18_azuredevopsprojectrequests'))}(@{encodeURIComponent(encodeURIComponent(triggerBody()?['cre18_azuredevopsprojectrequestid']))})"
-                },
-                "runAfter": {
-                    "Remove_Permissions_to_Create_Repositories": [
-                        "SUCCEEDED"
-                    ]
-                },
-                "type": "ApiConnection"
-            },
-            "Get_or_Create_Project": {
-                "inputs": {
-                    "body": {
-                        "organization": "@{triggerBody()?['cre18_azuredevopsprojectrequest_organization']}",
-                        "processTemplateId": "@{triggerBody()?['cre18_azuredevopsprojectrequest_processtemplate']}",
-                        "project": "@{triggerBody()?['cre18_azuredevopsprojectrequest_project']}"
-                    },
-                    "function": {
-                        "connectionName": "azureFunctionOperation"
-                    },
-                    "method": "POST"
-                },
-                "runAfter": {
-                    "Set_Request_Status_to_Active": [
-                        "SUCCEEDED"
-                    ]
-                },
-                "type": "Function"
-            },
             "New_Project_Details": {
+                "type": "ParseJson",
                 "inputs": {
-                    "content": "@body('Get_or_Create_Project')",
+                    "content": "@body('Create_Or_Update_Project')",
                     "schema": {
                         "properties": {
                             "_links": {
@@ -124,108 +80,171 @@
                     }
                 },
                 "runAfter": {
-                    "Get_or_Create_Project": [
+                    "Create_Or_Update_Project": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Project_Request": {
+                "type": "ParseJson",
+                "inputs": {
+                    "content": "@triggerBody()",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "partitionKey": {
+                                "type": "string"
+                            },
+                            "rowKey": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "string"
+                            },
+                            "organization": {
+                                "type": "string"
+                            },
+                            "project": {
+                                "type": "string"
+                            },
+                            "processTemplateId": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "string"
+                            },
+                            "createdAt": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "runAfter": {}
+            },
+            "Set_Request_Status_to_In_Progress": {
+                "type": "Http",
+                "inputs": {
+                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations@{body('Project_Request')?['organization']}/project-requests@{body('Project_Request')?['id']}",
+                    "method": "PATCH",
+                    "body": {
+                        "status": "In Progress"
+                    }
+                },
+                "runAfter": {
+                    "Project_Request": [
                         "SUCCEEDED"
                     ]
                 },
-                "type": "ParseJson"
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                }
+            },
+            "Create_Or_Update_Project": {
+                "type": "Http",
+                "inputs": {
+                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations@{body('Project_Request')?['organization']}/projects?code=WczMgMh55BaQHBK0WV5lwajoh9CQDsNjsYo-lu7pJrNOAzFuZcum4g==",
+                    "method": "POST",
+                    "body": {
+                        "project": "@{body('Project_Request')?['project']}",
+                        "processId": "@{body('Project_Request')?['processTemplateId']}"
+                    }
+                },
+                "runAfter": {
+                    "Set_Request_Status_to_In_Progress": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                }
             },
             "Remove_Permissions_to_Create_Repositories": {
+                "type": "Http",
                 "inputs": {
-                    "body": {
-                        "organization": "@{triggerBody()?['cre18_azuredevopsprojectrequest_organization']}",
-                        "project": "@{triggerBody()?['cre18_azuredevopsprojectrequest_project']}"
-                    },
-                    "function": {
-                        "connectionName": "azureFunctionOperation-2"
-                    },
-                    "method": "POST"
+                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations/@{body('Project_Request')?['organization']}/projects/@{body('Project_Request')?['project']}/permissions?code=hnJEHBz2Bd7jkNpYsfsNi3QZyGX8nsXVf75VCy7IQaMRAzFu4EicwA==",
+                    "method": "DELETE"
                 },
                 "runAfter": {
                     "New_Project_Details": [
                         "SUCCEEDED"
                     ]
                 },
-                "type": "Function"
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                }
             },
-            "Set_Request_Status_to_Active": {
+            "Complete_Request": {
+                "type": "Http",
                 "inputs": {
+                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations@{body('Project_Request')?['organization']}/project-requests@{body('Project_Request')?['id']}?",
+                    "method": "PATCH",
                     "body": {
-                        "cre18_azuredevopsprojectrequest_requeststatus": 935000001
-                    },
-                    "headers": {
-                        "accept": "application/json;odata.metadata=full",
-                        "organization": "https://csapps.crm.dynamics.com",
-                        "prefer": "return=representation,odata.include-annotations=*"
-                    },
-                    "host": {
-                        "connection": {
-                            "referenceName": "commondataservice"
-                        }
-                    },
-                    "method": "patch",
-                    "path": "/api/data/v9.1/@{encodeURIComponent(encodeURIComponent('cre18_azuredevopsprojectrequests'))}(@{encodeURIComponent(encodeURIComponent(triggerBody()?['cre18_azuredevopsprojectrequestid']))})"
-                },
-                "runAfter": {},
-                "type": "ApiConnection"
-            },
-            "Set_Request_Status_to_Error": {
-                "inputs": {
-                    "body": {
-                        "cre18_azuredevopsprojectrequest_requeststatus": 935000005
-                    },
-                    "headers": {
-                        "accept": "application/json;odata.metadata=full",
-                        "organization": "https://csapps.crm.dynamics.com",
-                        "prefer": "return=representation,odata.include-annotations=*"
-                    },
-                    "host": {
-                        "connection": {
-                            "referenceName": "commondataservice"
-                        }
-                    },
-                    "method": "patch",
-                    "path": "/api/data/v9.1/@{encodeURIComponent(encodeURIComponent('cre18_azuredevopsprojectrequests'))}(@{encodeURIComponent(encodeURIComponent(triggerBody()?['cre18_azuredevopsprojectrequestid']))})"
+                        "status": "Completed",
+                        "url": "@{body('New_Project_Details')?['_links']?['web']?['href']}"
+                    }
                 },
                 "runAfter": {
-                    "Get_or_Create_Project": [
+                    "Remove_Permissions_to_Create_Repositories": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                }
+            },
+            "Set_Request_Status_to_Error": {
+                "type": "Http",
+                "inputs": {
+                    "uri": "https://poc-azure-devops-automation.azurewebsites.net/api/organizations@{body('Project_Request')?['organization']}/project-requests/@{body('Project_Request')?['id']}",
+                    "method": "POST",
+                    "body": {
+                        "status": "Failed"
+                    }
+                },
+                "runAfter": {
+                    "Create_Or_Update_Project": [
                         "FAILED",
                         "SKIPPED"
                     ],
                     "Remove_Permissions_to_Create_Repositories": [
-                        "SKIPPED",
-                        "FAILED"
+                        "FAILED",
+                        "SKIPPED"
                     ]
                 },
-                "type": "ApiConnection"
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                }
             }
         },
         "contentVersion": "1.0.0.0",
         "outputs": {},
         "triggers": {
-            "When_a_row_is_added,_modified_or_deleted_(preview)": {
+            "When_there_are_messages_in_a_queue_(V2)": {
+                "type": "ApiConnection",
                 "inputs": {
-                    "body": {
-                        "entityname": "cre18_azuredevopsprojectrequest",
-                        "message": 1,
-                        "scope": 4,
-                        "url": "@{listCallbackUrl()}",
-                        "version": 1
-                    },
-                    "headers": {
-                        "Consistency": "Strong",
-                        "catalog": "all",
-                        "category": "all",
-                        "organization": "https://csapps.crm.dynamics.com"
-                    },
                     "host": {
                         "connection": {
-                            "referenceName": "commondataservice-2"
+                            "referenceName": "azurequeues-2"
                         }
                     },
-                    "path": "/api/data/v9.1/callbackregistrations"
+                    "method": "get",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/queues/@{encodeURIComponent('new-requests-queue')}/message_trigger"
                 },
-                "type": "ApiConnectionWebhook"
+                "recurrence": {
+                    "interval": 3,
+                    "frequency": "Minute"
+                },
+                "splitOn": "@triggerBody()?['QueueMessagesList']?['QueueMessage']"
             }
         }
     },

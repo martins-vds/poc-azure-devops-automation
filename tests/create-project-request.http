@@ -1,0 +1,7 @@
+POST http://localhost:7071/api/organizations/vinima-contoso/project-requests
+content-type: application/json
+
+{    
+    "projectName": "NewScrum5",
+    "processId": "adcc42ab-9882-485e-a3ed-7678f01f66bc"
+}
