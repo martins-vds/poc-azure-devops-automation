@@ -23,6 +23,16 @@ function App() {
     setProcess(event.target.value as string)
   }
 
+  const fetchRequests = async () => {
+    try {
+      const requests = await api.getProjectRequests()
+      setRequests(requests)
+    } catch {
+      console.error('Error fetching requests')
+      setRequests([])
+    }
+  }
+
   useEffect(() => {
     const fetchOrganizations = async () => {
       try {
@@ -38,20 +48,19 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (refreshTable === false) return
+    const refreshTimer = setInterval(() => {
+      fetchRequests()
+    }, 5000)
 
-    const fetchRequests = async () => {
-      try {
-        const requests = await api.getProjectRequests()
-        setRequests(requests)
-      } catch {
-        console.error('Error fetching requests')
-        setRequests([])
-      }
-    }
+    return () => clearInterval(refreshTimer)
+  }, [])
+
+  useEffect(() => {
+    if (refreshTable === false) return
 
     fetchRequests()
     setRefreshTable(false)
+
   }, [refreshTable])
 
   useEffect(() => {
