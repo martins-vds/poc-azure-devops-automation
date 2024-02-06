@@ -36,7 +36,7 @@ jobs:
         npm run build --if-present
         npm run test --if-present
         mkdir -p ../output
-        zip -r ../output/api.zip ./dist/*
+        zip -r ../output/api.zip .
         popd
   
     - name: Upload app zip package
@@ -56,11 +56,11 @@ jobs:
       with:
         inlineScript: |          
           az functionapp deployment source config-zip --name ${{ vars.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ vars.RG_FUNCTION_APP }} --src ./output/api.zip --build-remote false
-          az functionapp deploy --name ${{ vars.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ vars.RG_FUNCTION_APP }} --src-path  ./${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/host.json --type static --target-path host.json
-          az functionapp deploy --name ${{ vars.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ vars.RG_FUNCTION_APP }} --src-path  ./${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/package.json --type static --target-path package.json
-          az functionapp deploy --name ${{ vars.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ vars.RG_FUNCTION_APP }} --src-path  ./${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/package-lock.json --type static --target-path package-lock.json
-          az functionapp deploy --name ${{ vars.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ vars.RG_FUNCTION_APP }} --src-path  ./${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/tsconfig.json --type static --target-path tsconfig.json
-          az functionapp restart --name ${{ vars.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ vars.RG_FUNCTION_APP }}
+        # az functionapp deploy --name ${{ vars.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ vars.RG_FUNCTION_APP }} --src-path  ./${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/host.json --type static --target-path host.json
+        # az functionapp deploy --name ${{ vars.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ vars.RG_FUNCTION_APP }} --src-path  ./${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/package.json --type static --target-path package.json
+        # az functionapp deploy --name ${{ vars.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ vars.RG_FUNCTION_APP }} --src-path  ./${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/package-lock.json --type static --target-path package-lock.json
+        # az functionapp deploy --name ${{ vars.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ vars.RG_FUNCTION_APP }} --src-path  ./${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/tsconfig.json --type static --target-path tsconfig.json
+        # az functionapp restart --name ${{ vars.AZURE_FUNCTIONAPP_NAME }} --resource-group ${{ vars.RG_FUNCTION_APP }}
 
   build_and_deploy_swa:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
