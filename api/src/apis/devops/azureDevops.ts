@@ -53,6 +53,12 @@ const getProcessTemplates = async function (organization: string): Promise<Proce
 }
 
 const createProject = async function (organization: string, processId: string, projectName: string): Promise<void> {
+    const project = await getProject(organization, projectName);
+
+    if (project) {
+        return project;
+    }
+
     const operation = await devApi.request({
         url: `/${organization}/_apis/projects?api-version=7.2-preview.4`,
         method: "POST",
@@ -116,12 +122,16 @@ const waitOperation = async function (operationUrl: string): Promise<void> {
 }
 
 const getProject = async function (organization: string, projectName: string): Promise<any> {
-    const newProject = await devApi.request({
-        url: `/${organization}/_apis/projects/${projectName}?api-version=7.2-preview.4`,
-        method: "GET"
-    });
+    try {
+        const newProject = await devApi.request({
+            url: `/${organization}/_apis/projects/${projectName}?api-version=7.2-preview.4`,
+            method: "GET"
+        });
 
-    return newProject.data;
+        return newProject.data;
+    } catch (error) {
+        return null;
+    }
 }
 
 const getProjectDescriptor = async function (organization: string, storageKey: string): Promise<string> {
