@@ -7,6 +7,7 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > mic
     apt install -y xz-utils && \
     apt install -y curl && \
     apt install -y wget apt-transport-https software-properties-common && \
+    apt install -y dotnet-runtime-8.0 && \
     curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - && \
     apt install -y nodejs && \
     npm install -g npm@latest && \

@@ -4,9 +4,9 @@
 	"name": "C# (.NET)",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"build": {
-        // Path is relative to the devcontainer.json file.
-        "dockerfile": "Dockerfile"
-    },
+		// Path is relative to the devcontainer.json file.
+		"dockerfile": "Dockerfile"
+	},
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "./.devcontainer/scripts/post-create.sh",
 	"customizations": {
@@ -24,7 +24,19 @@
 				"ms-azuretools.vscode-bicep",
 				"msazurermtools.azurerm-vscode-tools",
 				"ms-vscode.azurecli"
-			]
+			],
+			"settings": {
+				"dotnetAcquisitionExtension.existingDotnetPath": [
+					{
+						"extensionId": "ms-azuretools.vscode-bicep",
+						"path": "/usr/bin/dotnet"
+					},
+					{
+						"extensionId": "ms-azuretools.vscode-bicep",
+						"path": "C:\\Program Files\\dotnet\\dotnet.exe"
+					}
+				]
+			}
 		}
 	}
 	// Features to add to the dev container. More info: https://containers.dev/features.
