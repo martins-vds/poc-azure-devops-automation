@@ -104,7 +104,7 @@
                             "organization": {
                                 "type": "string"
                             },
-                            "project": {
+                            "projectName": {
                                 "type": "string"
                             },
                             "processTemplateId": {
@@ -147,7 +147,7 @@
                     "uri": "@{parameters('function_url')}/api/organizations/@{body('Project_Request')?['organization']}/projects?code=@{parameters('function_key')}",
                     "method": "POST",
                     "body": {
-                        "projectName": "@{body('Project_Request')?['project']}",
+                        "projectName": "@{body('Project_Request')?['projectName']}",
                         "processId": "@{body('Project_Request')?['processTemplateId']}"
                     }
                 },
