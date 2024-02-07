@@ -28,7 +28,8 @@ interface ProjectRequest {
     project: string;
     processTemplateId: string;
     url: string;
-    status: "Pending" | "Approved" | "Rejected" | "Failed";
+    status: "Pending" | "In Progress" | "Approved" | "Rejected" | "Failed" | "Completed";
+    statusMessage?: string;
     createdAt: Date;
 }
 
@@ -102,7 +103,7 @@ async function updateProjectRequest(request: HttpRequest, context: InvocationCon
     const projectRequest = <ProjectRequest>(await context.extraInputs.get(tableInput))[0];
 
     if (projectRequest) {
-        const { url: updatedUrl, status: updatedStatus } = payload;
+        const { url: updatedUrl, status: updatedStatus, statusMessage } = payload;
 
         const { PartitionKey, RowKey, ...existing } = projectRequest;
 
@@ -111,7 +112,8 @@ async function updateProjectRequest(request: HttpRequest, context: InvocationCon
             rowKey: projectRequest.RowKey,
             ...existing,
             url: updatedUrl,
-            status: updatedStatus
+            status: updatedStatus,
+            statusMessage: statusMessage,
         }, "Merge");
     }
 

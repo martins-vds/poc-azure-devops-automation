@@ -204,9 +204,10 @@
                 "type": "Http",
                 "inputs": {
                     "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['id']}?code=@{parameters('function_key')}",
-                    "method": "POST",
+                    "method": "PATCH",
                     "body": {
-                        "status": "Failed"
+                        "status": "Failed",
+                        "statusMessage": "@{body('Create_Or_Update_Project')}"
                     }
                 },
                 "runAfter": {
