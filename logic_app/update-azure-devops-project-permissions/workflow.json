@@ -165,7 +165,7 @@
             "Remove_Permissions_to_Create_Repositories": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "@{parameters('function_url')}/api/organizations/@{body('Project_Request')?['organization']}/projects/@{body('Project_Request')?['project']}/permissions?code=@{parameters('function_key')}",
+                    "uri": "@{parameters('function_url')}/api/organizations/@{body('Project_Request')?['organization']}/projects/@{body('Project_Request')?['projectName']}/permissions?code=@{parameters('function_key')}",
                     "method": "DELETE"
                 },
                 "runAfter": {
