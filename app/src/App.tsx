@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, Container, CssBaseline, Divider, FormControl, InputLabel, Link, MenuItem, Paper, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, CssBaseline, Divider, FormControl, InputLabel, Link, MenuItem, Paper, Select, SelectChangeEvent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material'
 import './App.css'
 import { Organization, Process, ProjectRequest, api } from './api'
 
@@ -103,65 +103,73 @@ function App() {
         }} align='left'>
           Submit Project Request
         </Typography>
-        <FormControl sx={{
-          width: '200px',
-        }}>
-          <InputLabel id="organization-label">Organization</InputLabel>
-          <Select
-            labelId="organization"
-            id="organization-select"
-            value={organization}
-            label="Organization"
-            onChange={handleOrganizationChange}
-          >
-            {organizations.map((organization, index) => {
-              return (
-                <MenuItem key={index} value={organization}>
-                  {organization}
-                </MenuItem>
-              )
-            })}
-          </Select>
-        </FormControl>
-        <FormControl sx={{
-          width: '200px',
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'row',
           marginTop: '20px',
+          gap: '20px',
         }}>
-          <InputLabel id="process-label">Process Template</InputLabel>
-          <Select
-            labelId="process-label"
-            id="process-select"
-            value={processId}
-            label="Process Template"
-            onChange={handleProcessChange}
-          >
-            {processes.map((process) => {
-              return (
-                <MenuItem value={process.id}>
-                  {process.name}
-                </MenuItem>
-              )
-            })}
-          </Select>
-        </FormControl>
-        <FormControl sx={{
-          width: '200px',
-          marginTop: '20px'
-        }}>
-          <TextField
-            label="Project Name"
-            value={projectName}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setProjectName(event.target.value);
-            }}
-          />
-        </FormControl>
+          <FormControl sx={{
+            flexGrow: 1,
+          }}>
+            <InputLabel id="organization-label">Organization</InputLabel>
+            <Select
+              labelId="organization"
+              id="organization-select"
+              value={organization}
+              label="Organization"
+              onChange={handleOrganizationChange}
+            >
+              {organizations.map((organization, index) => {
+                return (
+                  <MenuItem key={index} value={organization}>
+                    {organization}
+                  </MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl>
+          <FormControl sx={{
+            flexGrow: 1,
+          }}>
+            <InputLabel id="process-label">Process Template</InputLabel>
+            <Select
+              labelId="process-label"
+              id="process-select"
+              value={processId}
+              label="Process Template"
+              onChange={handleProcessChange}
+            >
+              {processes.map((process) => {
+                return (
+                  <MenuItem value={process.id}>
+                    {process.name}
+                  </MenuItem>
+                )
+              })}
+            </Select>
+          </FormControl>
+          <FormControl sx={{
+            flexGrow: 1,
+          }}>
+            <TextField
+              label="Project Name"
+              value={projectName}
+              fullWidth={false}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setProjectName(event.target.value);
+              }}
+            />
+          </FormControl>
+        </Box>
         <FormControl sx={{
           marginTop: '20px'
         }}>
           <Button variant="contained" onClick={handleSubmit} fullWidth={false}>Submit</Button>
         </FormControl>
-        <Divider variant='fullWidth' />
+        <Divider variant='fullWidth' sx={{
+          marginTop: '20px',
+        }} />
         <Typography variant="h6" sx={{
           marginTop: '20px',
         }} align='left'>
