@@ -241,8 +241,9 @@
                     "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/queues/@{encodeURIComponent('new-requests-queue')}/message_trigger"
                 },
                 "recurrence": {
-                    "interval": 3,
-                    "frequency": "Minute"
+                    "interval": 30,
+                    "frequency": "Second",
+                    "timeZone": "Mountain Standard Time"
                 },
                 "splitOn": "@triggerBody()?['QueueMessagesList']?['QueueMessage']"
             }
