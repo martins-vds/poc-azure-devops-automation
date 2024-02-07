@@ -23,7 +23,8 @@
 				"redhat.vscode-yaml",
 				"ms-azuretools.vscode-bicep",
 				"msazurermtools.azurerm-vscode-tools",
-				"ms-vscode.azurecli"
+				"ms-vscode.azurecli",
+				"humao.rest-client"
 			],
 			"settings": {
 				"dotnetAcquisitionExtension.existingDotnetPath": [
