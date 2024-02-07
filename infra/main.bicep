@@ -10,6 +10,7 @@ param serverfarms_poc_azure_devops_automation_logic_name string = 'poc-azure-dev
 param smartdetectoralertrules_failure_anomalies_poc_azure_devops_automation_name string = 'failure anomalies - poc-azure-devops-automation'
 param actiongroups_application_insights_smart_detection_externalid string = '/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/resourceGroups/rg-work-sync/providers/microsoft.insights/actiongroups/application insights smart detection'
 param workspaces_DefaultWorkspace_83e40e54_5652_45ac_b526_202136f6cfd1_WUS2_externalid string = '/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/resourceGroups/DefaultResourceGroup-WUS2/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-83e40e54-5652-45ac-b526-202136f6cfd1-WUS2'
+param location string = resourceGroup().location
 
 resource components_poc_azure_devops_automation_name_resource 'microsoft.insights/components@2020-02-02' = {
   name: components_poc_azure_devops_automation_name

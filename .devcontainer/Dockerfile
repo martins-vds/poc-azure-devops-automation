@@ -18,4 +18,5 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > mic
     rm powershell_7.4.1-1.deb_amd64.deb && \
     apt install azure-functions-core-tools-4 && \
     curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash && \
-    az upgrade --all --yes --only-show-errors
+    az upgrade --all --yes --only-show-errors && \
+    az bicep install
