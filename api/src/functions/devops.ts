@@ -146,13 +146,15 @@ async function removeProjectPermissions(request: HttpRequest, context: Invocatio
 
 app.http('organizations', {
     methods: ['GET'],
-    handler: getOrganizations
+    handler: getOrganizations,
+    authLevel: 'anonymous'
 });
 
 app.http('processes', {
     methods: ['GET'],
     route: 'organizations/{organization}/processes',
-    handler: getProcessTemplates
+    handler: getProcessTemplates,
+    authLevel: 'anonymous'
 });
 
 app.http('requestProject', {
@@ -160,6 +162,7 @@ app.http('requestProject', {
     route: 'project-requests',
     handler: requestNewProject,
     extraOutputs: [tableOutput, queueOutput],
+    authLevel: 'anonymous'
 });
 
 app.http('projectRequests', {
@@ -167,13 +170,15 @@ app.http('projectRequests', {
     route: 'project-requests',
     handler: projectRequests,
     extraInputs: [tableInput],
+    authLevel: 'anonymous'
 });
 
 app.http('updateRequestProject', {
     methods: ['PATCH'],
     route: 'project-requests/{requestId}',
     handler: updateProjectRequest,
-    extraInputs: [tableInput]
+    extraInputs: [tableInput],
+    authLevel: 'function'
 });
 
 app.http('newProject', {
