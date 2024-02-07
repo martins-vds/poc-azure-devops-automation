@@ -302,6 +302,14 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
           name: 'function_key'
           value: listkeys('${function_app.id}/host/default', function_app.apiVersion)
         }
+        {
+          name: 'azurequeues-connectionId'
+          value: project_request_queue_connection.id
+        }
+        {
+          name: 'azurequeues-apiConnection'
+          value: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue}'
+        }
       ]
     }
     scmSiteAlsoStopped: false

@@ -14,5 +14,17 @@
   "function_url": {
     "type": "String",
     "value": "@appsetting('function_url')"
+  },
+  "azurequeues-apiConnection": {
+    "type": "String",
+    "value": "@appsetting('azurequeues-apiConnection')"
+  },
+  "azurequeues-connectionKey": {
+    "type": "String",
+    "value": "@appsetting('azurequeues-connectionKey')"
+  },
+  "azurequeues-connectionId": {
+    "type": "String",
+    "value": "@appsetting('azurequeues-connectionId')"
   }
 }

@@ -3,10 +3,10 @@
   "managedApiConnections": {
     "azurequeues": {
       "api": {
-        "id": "/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/providers/Microsoft.Web/locations/westus3/managedApis/azurequeues"
+        "id": "@parameters('azurequeues-apiConnection')"
       },
       "connection": {
-        "id": "/subscriptions/83e40e54-5652-45ac-b526-202136f6cfd1/resourceGroups/rg-poc-azure-devops-automation/providers/Microsoft.Web/connections/azurequeues"
+        "id": "@parameters('azurequeues-connectionId')"
       },
       "connectionRuntimeUrl": "https://9c0696b1b877c451.14.common.logic-westus3.azure-apihub.net/apim/azurequeues/5457c48b5c8445bc9f725260e7b66b59/",
       "authentication": "@parameters('blob_auth')"
