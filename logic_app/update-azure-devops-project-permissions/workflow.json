@@ -147,7 +147,7 @@
                     "uri": "@{parameters('function_url')}/api/organizations/@{body('Project_Request')?['organization']}/projects?code=@{parameters('function_key')}",
                     "method": "POST",
                     "body": {
-                        "project": "@{body('Project_Request')?['project']}",
+                        "projectName": "@{body('Project_Request')?['project']}",
                         "processId": "@{body('Project_Request')?['processTemplateId']}"
                     }
                 },

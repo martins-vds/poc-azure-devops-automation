@@ -25,7 +25,7 @@ interface ProjectRequest {
     RowKey: string;
     id: string;
     organization: string;
-    project: string;
+    projectName: string;
     processTemplateId: string;
     url: string;
     status: "Pending" | "In Progress" | "Approved" | "Rejected" | "Failed" | "Completed";
@@ -65,7 +65,7 @@ async function requestNewProject(request: HttpRequest, context: InvocationContex
         RowKey: id,
         id: id,
         organization: org,
-        project: project,
+        projectName: project,
         processTemplateId: processId,
         status: 'Pending',
         url: '',
@@ -130,7 +130,7 @@ async function createProject(request: HttpRequest, context: InvocationContext): 
     const processId = payload.processId;
 
     return {
-        jsonBody: await AzureDevOpsApi.createProject(org, projectName, processId),
+        jsonBody: await AzureDevOpsApi.createProject(org, processId, projectName),
         status: 201
     };
 };

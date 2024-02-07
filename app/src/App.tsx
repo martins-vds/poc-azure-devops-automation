@@ -7,7 +7,7 @@ function App() {
   const [organization, setOrganization] = useState<Organization>('')
   const [organizations, setOrganizations] = useState<Organization[]>([]) // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 
-  const [process, setProcess] = useState('')
+  const [processId, setProcessId] = useState('')
   const [processes, setProcesses] = useState<Process[]>([])
 
   const [refreshTable, setRefreshTable] = useState(false)
@@ -20,7 +20,7 @@ function App() {
   }
 
   const handleProcessChange = (event: SelectChangeEvent) => {
-    setProcess(event.target.value as string)
+    setProcessId(event.target.value as string)
   }
 
   const fetchRequests = async () => {
@@ -35,7 +35,7 @@ function App() {
 
   const handleSubmit = async () => {
     try {
-      await api.submitProjectRequest(organization, process, projectName)
+      await api.submitProjectRequest(organization, processId, projectName)
       setRefreshTable(true)
     } catch {
       console.error('Error creating project request')
@@ -131,7 +131,7 @@ function App() {
           <Select
             labelId="process-label"
             id="process-select"
-            value={process}
+            value={processId}
             label="Process Template"
             onChange={handleProcessChange}
           >
@@ -187,7 +187,7 @@ function App() {
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell>{request.organization}</TableCell>
-                    <TableCell>{request.project}</TableCell>
+                    <TableCell>{request.projectName}</TableCell>
                     <TableCell><Link href={request.url}
                       target="_blank"
                       rel="noopener noreferrer"

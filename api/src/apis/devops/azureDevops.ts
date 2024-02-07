@@ -52,7 +52,7 @@ const getProcessTemplates = async function (organization: string): Promise<Proce
     });
 }
 
-const createProject = async function (organization: string, projectName: string, processId: string): Promise<void> {
+const createProject = async function (organization: string, processId: string, projectName: string): Promise<void> {
     const operation = await devApi.request({
         url: `/${organization}/_apis/projects?api-version=7.2-preview.4`,
         method: "POST",
