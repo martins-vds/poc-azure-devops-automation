@@ -14,6 +14,13 @@ env:
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'api'
   NODE_VERSION: '18.x'
 
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   prod_deploy_infra:
     runs-on: ubuntu-latest
