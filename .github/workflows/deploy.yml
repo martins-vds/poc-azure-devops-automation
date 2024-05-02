@@ -58,6 +58,7 @@ jobs:
         template: ./infra/main.bicep
         parameters: 'poc_name=${{ vars.POC_NAME }} repositoryUrl=${{ github.server_url }}/${{ github.repository }} azure_devops_pat=${{ secrets.AZURE_DEVOPS_PAT }}'
         failOnStdErr: false
+        deploymentName: 'deploy-infra-${{ github.run_id }}'
         scope: 'resourcegroup'
     
     - name: Set SWA API Token
