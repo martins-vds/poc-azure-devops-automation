@@ -1,10 +1,13 @@
 @minLength(4)
 param poc_name string = 'poc-azure-devops-automation'
-param repositoryUrl string = 'https://github.com/martins-vds/poc-azure-devops-automation'
 param project_request_queue_name string = 'new-requests-queue'
 param project_request_table_name string = 'AzureDevOpsProjectRequests'
-param azure_devops_pat string = ''
+param repositoryUrl string
+
 param location string = resourceGroup().location
+
+@secure()
+param azure_devops_pat string = ''
 
 var poc_name_sanitized = toLower(replace(replace(poc_name, '-', ''), ' ', ''))
 var function_app_storage_name = '${poc_name_sanitized}funcstg'
@@ -372,3 +375,6 @@ resource swa_func_app_backend 'Microsoft.Web/staticSites/userProvidedFunctionApp
     functionAppRegion: location
   }
 }
+
+output la_name string = logic_app.name
+output function_app_name string = function_app.name
