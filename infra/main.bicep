@@ -1,5 +1,5 @@
 @minLength(4)
-param poc_name string = 'poc-azure-devops-automation'
+param poc_name string
 param project_request_queue_name string = 'new-requests-queue'
 param project_request_table_name string = 'AzureDevOpsProjectRequests'
 param repositoryUrl string
@@ -9,7 +9,7 @@ param location string = resourceGroup().location
 @secure()
 param azure_devops_pat string = ''
 
-var poc_name_sanitized = toLower(replace(replace(poc_name, '-', ''), ' ', ''))
+var poc_name_sanitized = take(toLower(replace(replace(poc_name, '-', ''), ' ', '')), 10)
 var function_app_storage_name = '${poc_name_sanitized}funcstg'
 var logic_app_storage_name = '${poc_name_sanitized}logicstg'
 var project_request_queue_connection_name = 'azurequeues'
