@@ -67,6 +67,7 @@ jobs:
       with:        
         inlineScript: |
           token=$(az staticwebapp secrets list --name '${{ steps.deploy_infra.outputs.swa_name }}' --resource-group '${{ vars.RG_NAME }}' --query 'properties.apiKey' -o tsv)
+          echo "::add-mask::$token"
           echo "token=$token" >> "$GITHUB_OUTPUT"
   
   prod_build_and_deploy_function:
