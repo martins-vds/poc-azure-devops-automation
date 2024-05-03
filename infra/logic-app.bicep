@@ -3,6 +3,7 @@ param location string = resourceGroup().location
 
 var poc_name_sanitized = take(toLower(replace(replace(poc_name, '-', ''), ' ', '')), 10)
 var logic_app_storage_name = '${poc_name_sanitized}logicstg'
+var function_app_storage_name = '${poc_name_sanitized}funcstg'
 var project_request_queue_connection_name = 'azurequeues'
 
 resource function_app 'Microsoft.Web/sites@2023-01-01' existing = {
@@ -84,6 +85,10 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
   }
 }
 
+resource project_request_queue 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
+    name: function_app_storage_name
+}
+
 resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01' = {
   name: project_request_queue_connection_name
   location: location
@@ -95,7 +100,10 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
       description: 'Azure Queue storage provides cloud messaging between application components. Queue storage also supports managing asynchronous tasks and building process work flows.'
       brandColor: '#0072C6'
       id: subscriptionResourceId('Microsoft.Web/locations/managedApis', location, 'azurequeues')
-      type: 'Microsoft.Web/locations/managedApis'
+      type: 'Microsoft.Web/locations/managedApis'      
+    }
+    nonSecretParameterValues: {
+      storageaccount: project_request_queue.properties.primaryEndpoints.queue
     }
     testLinks: [
       {
