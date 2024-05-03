@@ -79,14 +79,14 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
     serverFarmId: logic_app_sp.id
     siteConfig: {
       functionsRuntimeScaleMonitoringEnabled: false
-    }          
+    }
     httpsOnly: true
     keyVaultReferenceIdentity: 'SystemAssigned'
   }
 }
 
 resource project_request_queue 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
-    name: project_request_storage_name
+  name: project_request_storage_name
 }
 
 resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01' = {
@@ -100,7 +100,7 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
       description: 'Azure Queue storage provides cloud messaging between application components. Queue storage also supports managing asynchronous tasks and building process work flows.'
       brandColor: '#0072C6'
       id: subscriptionResourceId('Microsoft.Web/locations/managedApis', location, 'azurequeues')
-      type: 'Microsoft.Web/locations/managedApis'      
+      type: 'Microsoft.Web/locations/managedApis'
     }
     nonSecretParameterValues: {
       storageaccount: project_request_queue.properties.primaryEndpoints.queue
@@ -113,14 +113,20 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
         )
         method: 'get'
       }
-    ]    
+    ]
   }
-  
+
   resource accessPolices 'accessPolicies@2016-06-01' = {
     name: logic_app.name
     location: location
     properties: {
-      
+      principal: {
+        type: 'ActiveDirectory'
+        identity: {
+          objectId: logic_app.identity.principalId
+          tenantId: subscription().tenantId
+        }
+      }
     }
   }
 }
