@@ -75,32 +75,11 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
     type: 'SystemAssigned'
   }
   properties: {
-    enabled: true
     serverFarmId: logic_app_sp.id
-    reserved: false
-    isXenon: false
-    hyperV: false
-    vnetRouteAllEnabled: false
-    vnetImagePullEnabled: false
-    vnetContentShareEnabled: false
     siteConfig: {
-      numberOfWorkers: 1
-      acrUseManagedIdentityCreds: false
-      alwaysOn: false
-      http20Enabled: false
-      functionAppScaleLimit: 0
-      minimumElasticInstanceCount: 1
-    }      
-    scmSiteAlsoStopped: false
-    clientAffinityEnabled: false
-    clientCertEnabled: false
-    clientCertMode: 'Required'
-    hostNamesDisabled: false
-    containerSize: 1536
-    dailyMemoryTimeQuota: 0
+      functionsRuntimeScaleMonitoringEnabled: false
+    }          
     httpsOnly: true
-    redundancyMode: 'None'
-    storageAccountRequired: false
     keyVaultReferenceIdentity: 'SystemAssigned'
   }
 }
