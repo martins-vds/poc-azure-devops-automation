@@ -144,7 +144,7 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
         }
         {
           name: 'azurequeues-apiConnection'
-          value: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue}'
+          value: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue_name}'
         }
       ]
     }
