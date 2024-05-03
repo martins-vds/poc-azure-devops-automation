@@ -227,3 +227,4 @@ resource swa_func_app_backend 'Microsoft.Web/staticSites/userProvidedFunctionApp
 }
 
 output function_app_name string = function_app.name
+output swa_name string = swa.name
