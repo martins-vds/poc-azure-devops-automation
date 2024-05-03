@@ -3,7 +3,6 @@ param location string = resourceGroup().location
 
 var poc_name_sanitized = take(toLower(replace(replace(poc_name, '-', ''), ' ', '')), 10)
 var logic_app_storage_name = '${poc_name_sanitized}logicstg'
-var project_request_queue_name = 'new-requests-queue'
 var project_request_queue_connection_name = 'azurequeues'
 
 resource function_app 'Microsoft.Web/sites@2023-01-01' existing = {
@@ -40,10 +39,6 @@ resource api 'Microsoft.Web/locations/managedApis@2016-06-01' existing = {
   name: project_request_queue_connection_name
 }
 
-resource project_request_queue 'Microsoft.Storage/storageAccounts/queueServices/queues@2023-01-01' existing = {
-  name: project_request_queue_name
-}
-
 resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01' = {
   name: project_request_queue_connection_name
   location: location
@@ -67,10 +62,6 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
       }
     ]
   }
-
-  dependsOn: [
-    project_request_queue
-  ]
 }
 
 resource logic_app_storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
@@ -144,7 +135,7 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
         }
         {
           name: 'azurequeues-apiConnection'
-          value: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue_name}'
+          value: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue_connection_name}'
         }
       ]
     }
