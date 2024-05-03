@@ -34,36 +34,6 @@ resource logic_app_sp 'Microsoft.Web/serverfarms@2023-01-01' = {
   }
 }
 
-resource api 'Microsoft.Web/locations/managedApis@2016-06-01' existing = {
-  scope: subscription()
-  name: project_request_queue_connection_name
-}
-
-resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01' = {
-  name: project_request_queue_connection_name
-  location: location
-  properties: {
-    displayName: project_request_queue_connection_name
-    api: {
-      name: project_request_queue_connection_name
-      displayName: 'Azure Queues'
-      description: 'Azure Queue storage provides cloud messaging between application components. Queue storage also supports managing asynchronous tasks and building process work flows.'
-      brandColor: '#0072C6'
-      id: api.id
-      type: 'Microsoft.Web/locations/managedApis'
-    }
-    testLinks: [
-      {
-        requestUri: uri(
-          environment().resourceManager,
-          '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.Web/connections/${project_request_queue_connection_name}/extensions/proxy/testConnection?api-version=2016-06-01'
-        )
-        method: 'get'
-      }
-    ]
-  }
-}
-
 resource logic_app_storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   name: logic_app_storage_name
   location: location
@@ -120,25 +90,7 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
       http20Enabled: false
       functionAppScaleLimit: 0
       minimumElasticInstanceCount: 1
-      appSettings: [
-        {
-          name: 'function_url'
-          value: function_app.properties.defaultHostName
-        }
-        {
-          name: 'function_key'
-          value: listkeys('${function_app.id}/host/default', function_app.apiVersion).functionKeys.default
-        }
-        {
-          name: 'azurequeues-connectionId'
-          value: project_request_queue_connection.id
-        }
-        {
-          name: 'azurequeues-apiConnection'
-          value: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue_connection_name}'
-        }
-      ]
-    }
+    }      
     scmSiteAlsoStopped: false
     clientAffinityEnabled: false
     clientCertEnabled: false
@@ -150,6 +102,42 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
     redundancyMode: 'None'
     storageAccountRequired: false
     keyVaultReferenceIdentity: 'SystemAssigned'
+  }
+}
+
+resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01' = {
+  name: project_request_queue_connection_name
+  location: location
+  properties: {
+    displayName: project_request_queue_connection_name
+    api: {
+      name: project_request_queue_connection_name
+      displayName: 'Azure Queues'
+      description: 'Azure Queue storage provides cloud messaging between application components. Queue storage also supports managing asynchronous tasks and building process work flows.'
+      brandColor: '#0072C6'
+      id: subscriptionResourceId('Microsoft.Web/locations/managedApis', location, 'azurequeues')
+      type: 'Microsoft.Web/locations/managedApis'
+    }
+    testLinks: [
+      {
+        requestUri: uri(
+          environment().resourceManager,
+          '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.Web/connections/${project_request_queue_connection_name}/extensions/proxy/testConnection?api-version=2016-06-01'
+        )
+        method: 'get'
+      }
+    ]
+  }
+}
+
+resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
+  parent: logic_app
+  name: 'appsettings'
+  properties: {
+    function_url: function_app.properties.defaultHostName
+    function_key: listkeys('${function_app.id}/host/default', function_app.apiVersion).functionKeys.default
+    'azurequeues-connectionId': project_request_queue_connection.id
+    'azurequeues-apiConnection': '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue_connection_name}'
   }
 }
 
