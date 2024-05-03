@@ -53,14 +53,16 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
       name: project_request_queue_connection_name
       displayName: 'Azure Queues'
       description: 'Azure Queue storage provides cloud messaging between application components. Queue storage also supports managing asynchronous tasks and building process work flows.'
-      iconUri: 'https://connectoricons-prod.azureedge.net/releases/v1.0.1666/1.0.1666.3495/${project_request_queue_connection_name}/icon.png'
       brandColor: '#0072C6'
       id: api.id
       type: 'Microsoft.Web/locations/managedApis'
     }
     testLinks: [
       {
-        requestUri: '${environment().resourceManager}:443/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.Web/connections/${project_request_queue_connection_name}/extensions/proxy/testConnection?api-version=2016-06-01'
+        requestUri: uri(
+          environment().resourceManager,
+          '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.Web/connections/${project_request_queue_connection_name}/extensions/proxy/testConnection?api-version=2016-06-01'
+        )
         method: 'get'
       }
     ]
@@ -84,8 +86,6 @@ resource logic_app_storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
     allowBlobPublicAccess: false
     networkAcls: {
       bypass: 'AzureServices'
-      virtualNetworkRules: []
-      ipRules: []
       defaultAction: 'Allow'
     }
     supportsHttpsTrafficOnly: true
