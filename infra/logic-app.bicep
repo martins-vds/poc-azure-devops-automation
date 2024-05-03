@@ -92,6 +92,7 @@ resource project_request_queue 'Microsoft.Storage/storageAccounts@2023-01-01' ex
 resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01' = {
   name: project_request_queue_connection_name
   location: location
+  kind: 'V2'
   properties: {
     displayName: project_request_queue_connection_name
     api: {
