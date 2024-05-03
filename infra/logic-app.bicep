@@ -3,7 +3,7 @@ param location string = resourceGroup().location
 
 var poc_name_sanitized = take(toLower(replace(replace(poc_name, '-', ''), ' ', '')), 10)
 var logic_app_storage_name = '${poc_name_sanitized}logicstg'
-var function_app_storage_name = '${poc_name_sanitized}funcstg'
+var project_request_storage_name = '${poc_name_sanitized}funcstg'
 var project_request_queue_connection_name = 'azurequeues'
 
 resource function_app 'Microsoft.Web/sites@2023-01-01' existing = {
@@ -86,7 +86,7 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
 }
 
 resource project_request_queue 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
-    name: function_app_storage_name
+    name: project_request_storage_name
 }
 
 resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01' = {
