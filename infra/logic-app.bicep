@@ -85,7 +85,7 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
   }
 }
 
-resource project_request_queue 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
+resource project_request_storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
   name: project_request_storage_name
 }
 
@@ -104,10 +104,10 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
       type: 'Microsoft.Web/locations/managedApis'
     }
     nonSecretParameterValues: {
-      storageaccount: project_request_queue.properties.primaryEndpoints.queue
+      storageaccount: project_request_storage.properties.primaryEndpoints.queue
     }
     customParameterValues:{      
-      sharedkey: project_request_queue.listKeys().keys[0].value
+      sharedkey: project_request_storage.listKeys().keys[0].value
     }
     testLinks: [
       {
