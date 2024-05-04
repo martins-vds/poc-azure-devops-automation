@@ -92,7 +92,6 @@ resource project_request_storage 'Microsoft.Storage/storageAccounts@2023-01-01' 
 resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01' = {
   name: project_request_queue_connection_name
   location: location
-  kind: 'V2'
   properties: {
     displayName: project_request_queue_connection_name
     api: {
@@ -118,20 +117,6 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
         method: 'get'
       }
     ]
-  }
-
-  resource accessPolices 'accessPolicies@2016-06-01' = {
-    name: logic_app.name
-    location: location
-    properties: {
-      principal: {
-        type: 'ActiveDirectory'
-        identity: {
-          objectId: logic_app.identity.principalId
-          tenantId: subscription().tenantId
-        }
-      }
-    }
   }
 }
 
