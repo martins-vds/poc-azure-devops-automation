@@ -106,6 +106,9 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
     nonSecretParameterValues: {
       storageaccount: project_request_queue.properties.primaryEndpoints.queue
     }
+    customParameterValues:{      
+      sharedkey: project_request_queue.listKeys().keys[0].value
+    }
     testLinks: [
       {
         requestUri: uri(
