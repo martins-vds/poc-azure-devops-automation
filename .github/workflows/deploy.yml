@@ -30,7 +30,7 @@ jobs:
       function_app_name: ${{ steps.deploy_infra.outputs.function_app_name }}
       swa_name: ${{ steps.deploy_infra.outputs.swa_name }}
       swa_api_token: ${{ steps.set_api_token.outputs.token }}
-      logic_app_name: ${{ steps.deploy_logic_app.outputs.logic_app_name }}   
+      logic_app_name: ${{ steps.deploy_infra.outputs.logic_app_name }}   
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@v4.1.1
