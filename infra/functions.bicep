@@ -162,4 +162,4 @@ resource function_app 'Microsoft.Web/sites@2023-01-01' = {
 
 output name string = function_app.name
 output principal_id string = function_app.identity.principalId
-output url string = function_app.properties.defaultHostName
+output url string = 'https://${function_app.properties.defaultHostName}'
