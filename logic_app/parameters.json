@@ -7,10 +7,6 @@
       "parameter": "@appsetting('azurequeues-connectionKey')"
     }
   },
-  "blob_auth_connectionProperties": {
-    "type": "object",
-    "value": {}
-  },
   "function_key": {
     "type": "String",
     "value": "@appsetting('function_key')"
