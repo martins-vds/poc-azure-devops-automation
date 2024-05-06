@@ -11,6 +11,7 @@ param azure_devops_pat string = ''
 
 var poc_name_sanitized = take(toLower(replace(replace(poc_name, '-', ''), ' ', '')), 10)
 var function_app_storage_name = '${poc_name_sanitized}funcstg'
+var logic_app_storage_name = '${poc_name_sanitized}logicstg'
 
 resource la_workspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
   name: poc_name
@@ -48,6 +49,12 @@ resource function_app_storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
       virtualNetworkRules: []
       ipRules: []
       defaultAction: 'Allow'
+      resourceAccessRules: [        
+        {
+          resourceId: logic_app.id
+          tenantId: tenant().tenantId
+        }
+      ]
     }
     supportsHttpsTrafficOnly: true
     encryption: {
@@ -226,5 +233,81 @@ resource swa_func_app_backend 'Microsoft.Web/staticSites/userProvidedFunctionApp
   }
 }
 
+resource logic_app_sp 'Microsoft.Web/serverfarms@2023-01-01' = {
+  name: '${poc_name}-logic-sp'
+  location: location
+  sku: {
+    name: 'WS1'
+    tier: 'WorkflowStandard'
+    size: 'WS1'
+    family: 'WS'
+    capacity: 1
+  }
+  kind: 'elastic'
+  properties: {
+    perSiteScaling: false
+    elasticScaleEnabled: true
+    maximumElasticWorkerCount: 20
+    isSpot: false
+    reserved: false
+    isXenon: false
+    hyperV: false
+    targetWorkerCount: 0
+    targetWorkerSizeId: 0
+    zoneRedundant: false
+  }
+}
+
+resource logic_app_storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
+  name: logic_app_storage_name
+  location: location
+  sku: {
+    name: 'Standard_LRS'
+  }
+  kind: 'StorageV2'
+  properties: {
+    allowCrossTenantReplication: false
+    minimumTlsVersion: 'TLS1_2'
+    allowBlobPublicAccess: false
+    networkAcls: {
+      bypass: 'AzureServices'
+      defaultAction: 'Allow'
+    }
+    supportsHttpsTrafficOnly: true
+    encryption: {
+      services: {
+        file: {
+          keyType: 'Account'
+          enabled: true
+        }
+        blob: {
+          keyType: 'Account'
+          enabled: true
+        }
+      }
+      keySource: 'Microsoft.Storage'
+    }
+    accessTier: 'Hot'
+  }
+}
+
+resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
+  name: '${poc_name}-logic'
+  location: location
+  kind: 'functionapp,workflowapp'
+  identity: {
+    type: 'SystemAssigned'
+  }
+  properties: {
+    serverFarmId: logic_app_sp.id
+    siteConfig: {
+      functionsRuntimeScaleMonitoringEnabled: false
+    }
+    httpsOnly: true
+    keyVaultReferenceIdentity: 'SystemAssigned'
+  }
+}
+
 output function_app_name string = function_app.name
 output swa_name string = swa.name
+output logic_app_name string = logic_app.name

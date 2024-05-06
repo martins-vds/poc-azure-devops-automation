@@ -29,7 +29,8 @@ jobs:
     outputs:      
       function_app_name: ${{ steps.deploy_infra.outputs.function_app_name }}
       swa_name: ${{ steps.deploy_infra.outputs.swa_name }}
-      swa_api_token: ${{ steps.set_api_token.outputs.token }}      
+      swa_api_token: ${{ steps.set_api_token.outputs.token }}
+      logic_app_name: ${{ steps.deploy_logic_app.outputs.logic_app_name }}   
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@v4.1.1
@@ -197,16 +198,16 @@ jobs:
         name: logic_app
         path: ./output/
   
-    - name: Deploy Infrastructure
+    - name: Configure Logic App
       id: deploy_logic_app
       uses: azure/arm-deploy@v2
       with:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ vars.RG_NAME }}
-        template: ./infra/logic-app.bicep
+        template: ./infra/logic-config.bicep
         parameters: 'poc_name=${{ vars.POC_NAME }}'
         failOnStdErr: false
-        deploymentName: 'deploy-logic-app-${{ github.run_id }}'
+        deploymentName: 'config-logic-app-${{ github.run_id }}'
         scope: 'resourcegroup'
 
     - name: Get publish Profile
@@ -216,16 +217,16 @@ jobs:
         inlineScript: |
           $profile = Get-AzWebAppPublishingProfile `
               -ResourceGroupName ${{ vars.RG_NAME }} `
-              -Name ${{ steps.deploy_logic_app.outputs.la_name }}
+              -Name ${{ needs.prod_deploy_infra.outputs.logic_app_name }}
           $profile = $profile.Replace("`r", "").Replace("`n", "")
           Write-Output "::set-output name=profile::$profile"
         azPSVersion: latest
 
-    - name: Deploy to Azure Logic App
+    - name: Deploy Workflows
       uses: Azure/functions-action@v1.5.1
       id: la
       with:
-        app-name: ${{ steps.deploy_logic_app.outputs.la_name }}
+        app-name: ${{ needs.prod_deploy_infra.outputs.logic_app_name }}
         package: './output/logic_app.zip'
         publish-profile: ${{secrets.publishprofile.outputs.profile}}
 
@@ -234,4 +235,4 @@ jobs:
       uses: azure/CLI@v2
       with:
         inlineScript: |
-          az functionapp deploy --resource-group ${{ vars.RG_NAME }} --name ${{ steps.deploy_logic_app.outputs.la_name }} --src-path  ./logic_app/azure.parameters.json --type static --target-path parameters.json --restart true --clean true
+          az functionapp deploy --resource-group ${{ vars.RG_NAME }} --name ${{ needs.prod_deploy_infra.outputs.logic_app_name }} --src-path  ./logic_app/azure.parameters.json --type static --target-path parameters.json --restart true --clean true

@@ -10,83 +10,16 @@ resource function_app 'Microsoft.Web/sites@2023-01-01' existing = {
   name: '${poc_name}-func'
 }
 
-resource logic_app_sp 'Microsoft.Web/serverfarms@2023-01-01' = {
-  name: '${poc_name}-logic-sp'
-  location: location
-  sku: {
-    name: 'WS1'
-    tier: 'WorkflowStandard'
-    size: 'WS1'
-    family: 'WS'
-    capacity: 1
-  }
-  kind: 'elastic'
-  properties: {
-    perSiteScaling: false
-    elasticScaleEnabled: true
-    maximumElasticWorkerCount: 20
-    isSpot: false
-    reserved: false
-    isXenon: false
-    hyperV: false
-    targetWorkerCount: 0
-    targetWorkerSizeId: 0
-    zoneRedundant: false
-  }
-}
-
-resource logic_app_storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: logic_app_storage_name
-  location: location
-  sku: {
-    name: 'Standard_LRS'
-  }
-  kind: 'StorageV2'
-  properties: {
-    allowCrossTenantReplication: false
-    minimumTlsVersion: 'TLS1_2'
-    allowBlobPublicAccess: false
-    networkAcls: {
-      bypass: 'AzureServices'
-      defaultAction: 'Allow'
-    }
-    supportsHttpsTrafficOnly: true
-    encryption: {
-      services: {
-        file: {
-          keyType: 'Account'
-          enabled: true
-        }
-        blob: {
-          keyType: 'Account'
-          enabled: true
-        }
-      }
-      keySource: 'Microsoft.Storage'
-    }
-    accessTier: 'Hot'
-  }
-}
-
-resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
-  name: '${poc_name}-logic'
-  location: location
-  kind: 'functionapp,workflowapp'
-  identity: {
-    type: 'SystemAssigned'
-  }
-  properties: {
-    serverFarmId: logic_app_sp.id
-    siteConfig: {
-      functionsRuntimeScaleMonitoringEnabled: false
-    }
-    httpsOnly: true
-    keyVaultReferenceIdentity: 'SystemAssigned'
-  }
+resource logic_app 'Microsoft.Web/sites@2023-01-01' existing = {
+  name: '${poc_name}-logic'  
 }
 
 resource project_request_storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
   name: project_request_storage_name
+}
+
+resource logic_app_storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
+  name: logic_app_storage_name
 }
 
 resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01' = {
@@ -103,7 +36,7 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
       id: subscriptionResourceId('Microsoft.Web/locations/managedApis', location, 'azurequeues')
       type: 'Microsoft.Web/locations/managedApis'
     }
-    parameterValues:{
+    parameterValues: {
       storageaccount: project_request_storage.properties.primaryEndpoints.queue
       sharedkey: project_request_storage.listKeys().keys[0].value
     }
@@ -115,7 +48,9 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
         )
         method: 'get'
       }
-    ]    
+    ]
+    parameterValueSet: {}
+    parameterValueType: 'Alternative'
   }
 }
 
@@ -128,7 +63,6 @@ resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
     'azurequeues-connectionId': project_request_queue_connection.id
     'azurequeues-apiConnection': '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue_connection_name}'
     AzureWebJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+    FUNCTIONS_EXTENSION_VERSION: '~4'
   }
 }
-
-output la_name string = logic_app.name
