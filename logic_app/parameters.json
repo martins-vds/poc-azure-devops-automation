@@ -7,6 +7,10 @@
       "parameter": "@appsetting('azurequeues-connectionKey')"
     }
   },
+  "azurequeues-connectionProperties": {
+    "type": "object",
+    "value": {}
+  },
   "function_key": {
     "type": "String",
     "value": "@appsetting('function_key')"

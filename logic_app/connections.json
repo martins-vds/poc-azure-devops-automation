@@ -9,7 +9,8 @@
         "id": "@parameters('azurequeues-connectionId')"
       },
       "connectionRuntimeUrl": "https://9c0696b1b877c451.14.common.logic-westus3.azure-apihub.net/apim/azurequeues/5457c48b5c8445bc9f725260e7b66b59/",
-      "authentication": "@parameters('blob_auth')"
+      "authentication": "@parameters('blob_auth')",
+      "connectionProperties": "@parameters('azurequeues-connectionProperties')"
     }
   }
 }

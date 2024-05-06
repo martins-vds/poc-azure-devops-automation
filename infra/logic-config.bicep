@@ -11,7 +11,7 @@ resource function_app 'Microsoft.Web/sites@2023-01-01' existing = {
 }
 
 resource logic_app 'Microsoft.Web/sites@2023-01-01' existing = {
-  name: '${poc_name}-logic'  
+  name: '${poc_name}-logic'
 }
 
 resource project_request_storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
@@ -36,9 +36,9 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
       id: subscriptionResourceId('Microsoft.Web/locations/managedApis', location, 'azurequeues')
       type: 'Microsoft.Web/locations/managedApis'
     }
-    parameterValues: {
-      storageaccount: project_request_storage.properties.primaryEndpoints.queue
-      sharedkey: project_request_storage.listKeys().keys[0].value
+    parameterValueSet: {
+      name: 'managedIdentityAuth'
+      values: {}
     }
     testLinks: [
       {
@@ -60,6 +60,7 @@ resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
     function_key: listkeys('${function_app.id}/host/default', function_app.apiVersion).functionKeys.default
     'azurequeues-connectionId': project_request_queue_connection.id
     'azurequeues-apiConnection': '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue_connection_name}'
+    'azurequeues-url': project_request_storage.properties.primaryEndpoints.queue
     AzureWebJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
     FUNCTIONS_EXTENSION_VERSION: '~4'
   }
