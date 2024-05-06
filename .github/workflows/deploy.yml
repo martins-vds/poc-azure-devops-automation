@@ -5,13 +5,10 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - main
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'api'
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './api'
+  AZURE_WEB_APP_PACKAGE_PATH: './app'
   NODE_VERSION: '18.x'
 
 permissions:
@@ -28,9 +25,9 @@ jobs:
     environment: production
     outputs:      
       function_app_name: ${{ steps.deploy_infra.outputs.function_app_name }}
-      swa_name: ${{ steps.deploy_infra.outputs.swa_name }}
-      swa_api_token: ${{ steps.set_api_token.outputs.token }}
-      logic_app_name: ${{ steps.deploy_infra.outputs.logic_app_name }}   
+      function_app_url: ${{ steps.deploy_infra.outputs.function_app_url }}
+      logic_app_name: ${{ steps.deploy_infra.outputs.logic_app_name }}
+      web_app_name: ${{ steps.deploy_infra.outputs.web_app_name }}
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@v4.1.1
@@ -57,18 +54,10 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ vars.RG_NAME }}
         template: ./infra/main.bicep
-        parameters: 'poc_name=${{ vars.POC_NAME }} repositoryUrl=${{ github.server_url }}/${{ github.repository }} azure_devops_pat=${{ secrets.AZURE_DEVOPS_PAT }}'
+        parameters: 'poc_name=${{ vars.POC_NAME }} azure_devops_pat=${{ secrets.AZURE_DEVOPS_PAT }}'
         failOnStdErr: false
         deploymentName: 'deploy-infra-${{ github.run_id }}'
-        scope: 'resourcegroup'
-    
-    - name: Set SWA API Token
-      id: set_api_token
-      uses: Azure/CLI@v2
-      with:        
-        inlineScript: |
-          token=$(az staticwebapp secrets list --name '${{ steps.deploy_infra.outputs.swa_name }}' --resource-group '${{ vars.RG_NAME }}' --query 'properties.apiKey' -o tsv)
-          echo "token=$token" >> "$GITHUB_OUTPUT"
+        scope: 'resourcegroup'      
   
   prod_build_and_deploy_function:
     runs-on: ubuntu-latest
@@ -120,44 +109,46 @@ jobs:
         package: './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
         publish-profile: ${{ secrets.funcpublishprofile.outputs.profile }}
 
-  prod_build_and_deploy_swa:    
+  prod_build_and_deploy_web_app:    
     runs-on: ubuntu-latest
     environment: production
     needs: [prod_deploy_infra, prod_build_and_deploy_function]
-    name: Build and Deploy Static Web App
+    name: Build and Deploy Web App
     steps:
       - uses: actions/checkout@v4.1.1
         with:
           submodules: true
           lfs: false
 
-      - name: Build And Deploy
-        id: builddeploy
-        uses: Azure/static-web-apps-deploy@v1
+      - name: Setup Node ${{ env.NODE_VERSION }} Environment
+        uses: actions/setup-node@v4.0.1
         with:
-          azure_static_web_apps_api_token: ${{ needs.prod_deploy_infra.outputs.swa_api_token }}
-          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
-          action: "upload"
-          app_location: "/app"
-          # Empty the api_location if you are bringing your own API
-          api_location: ""
-          skip_api_build: true
-          output_location: "dist"
-      
-  prod_close_pull_request_job:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    environment: production
-    needs: [prod_deploy_infra]
-    name: Close Pull Request Job
-    steps:
-      - name: Close Pull Request
-        id: closepullrequest
-        uses: Azure/static-web-apps-deploy@v1
+          node-version: ${{ env.NODE_VERSION }}
+    
+      - name: 'Resolve Project Dependencies Using Npm'
+        shell: bash
+        env:
+          VITE_API_URL: ${{ needs.prod_deploy_infra.outputs.function_app_url }}
+        run: |
+          pushd '${{ env.AZURE_WEB_APP_PACKAGE_PATH }}'
+          npm install
+          npm run build --if-present
+          npm run test --if-present
+          popd
+    
+      - name: Login via Az module
+        uses: azure/login@v2.1.0
         with:
-          azure_static_web_apps_api_token: ${{ secrets.deploy_infra.outputs.swa_api_token }}
-          action: "close"
-          app_location: "/app"
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION }}
+          enable-AzPSSession: true
+
+      - name: 'Run Azure webapp deploy action using publish profile credentials'
+        uses: azure/webapps-deploy@v3.0.1
+        with: 
+          app-name: ${{ needs.prod_deploy_infra.outputs.web_app_name }} # Replace with your app name
+          package: '${{ env.AZURE_WEB_APP_PACKAGE_PATH }}/dist'
 
   prod_logic_app_build:
     runs-on: ubuntu-latest

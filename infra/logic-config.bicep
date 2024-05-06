@@ -2,16 +2,18 @@ param poc_name string
 param location string = resourceGroup().location
 
 var poc_name_sanitized = take(toLower(replace(replace(poc_name, '-', ''), ' ', '')), 10)
+var function_app_name = '${poc_name}-func'
+var logic_app_name = '${poc_name}-logic'
 var logic_app_storage_name = '${poc_name_sanitized}logicstg'
 var project_request_storage_name = '${poc_name_sanitized}funcstg'
 var project_request_queue_connection_name = 'azurequeues'
 
 resource function_app 'Microsoft.Web/sites@2023-01-01' existing = {
-  name: '${poc_name}-func'
+  name: function_app_name
 }
 
 resource logic_app 'Microsoft.Web/sites@2023-01-01' existing = {
-  name: '${poc_name}-logic'
+  name: logic_app_name
 }
 
 resource project_request_storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
