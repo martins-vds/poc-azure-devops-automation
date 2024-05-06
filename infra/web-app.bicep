@@ -50,6 +50,7 @@ resource web_app 'Microsoft.Web/sites@2023-01-01' = {
           value: app_insights.properties.ConnectionString
         }
       ]
+      appCommandLine: 'pm2 serve /home/site/wwwroot --no-daemon'
     }
     httpsOnly: true
     publicNetworkAccess: 'Enabled'    
