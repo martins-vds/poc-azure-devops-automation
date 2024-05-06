@@ -14,7 +14,8 @@
   "dependencies": {
     "@azure/data-tables": "^13.2.2",
     "@azure/functions": "^4.4.0",
-    "axios": "^1.6.8"
+    "axios": "^1.6.8",
+    "follow-redirects": "^1.15.6"
   },
   "devDependencies": {
     "@types/node": "18.x",
