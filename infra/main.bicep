@@ -48,13 +48,7 @@ resource function_app_storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
       bypass: 'AzureServices'
       virtualNetworkRules: []
       ipRules: []
-      defaultAction: 'Allow'
-      resourceAccessRules: [
-        {
-          resourceId: logic_app.id
-          tenantId: tenant().tenantId
-        }
-      ]
+      defaultAction: 'Allow'      
     }
     supportsHttpsTrafficOnly: true
     encryption: {
