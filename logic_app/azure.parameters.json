@@ -1,17 +1,37 @@
 {
-    "blob_auth": {
-        "type": "object",
-        "value": {
-            "type": "ManagedServiceIdentity"
-        }
-    },
-    "azurequeues-connectionProperties": {
-      "type": "object",
-      "value": {
-        "authentication": {
-          "audience": "@appsetting('azurequeues-url')",
-          "type": "ManagedServiceIdentity"
-        }
+  "blob_auth": {
+    "type": "object",
+    "value": {
+      "type": "ManagedServiceIdentity"
+    }
+  },
+  "azurequeues-connectionProperties": {
+    "type": "object",
+    "value": {
+      "authentication": {
+        "audience": "@appsetting('azurequeues-url')",
+        "type": "ManagedServiceIdentity"
       }
     }
+  },
+  "function_key": {
+    "type": "String",
+    "value": "@appsetting('function_key')"
+  },
+  "function_url": {
+    "type": "String",
+    "value": "@appsetting('function_url')"
+  },
+  "azurequeues-apiConnection": {
+    "type": "String",
+    "value": "@appsetting('azurequeues-apiConnection')"
+  },
+  "azurequeues-connectionKey": {
+    "type": "String",
+    "value": "@appsetting('azurequeues-connectionKey')"
+  },
+  "azurequeues-connectionId": {
+    "type": "String",
+    "value": "@appsetting('azurequeues-connectionId')"
+  }
 }
