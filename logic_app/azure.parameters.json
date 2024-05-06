@@ -5,6 +5,15 @@
             "type": "ManagedServiceIdentity"
         }
     },
+    "blob_auth_connectionProperties": {
+      "type": "object",
+      "value": {
+        "authentication": {
+          "audience": "@appsetting('azurequeues-url')",
+          "type": "ManagedServiceIdentity"
+        }
+      }
+    },
     "function_key": {
       "type": "String",
       "value": "@appsetting('function_key')"
