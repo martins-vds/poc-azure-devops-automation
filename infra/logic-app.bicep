@@ -103,10 +103,8 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
       id: subscriptionResourceId('Microsoft.Web/locations/managedApis', location, 'azurequeues')
       type: 'Microsoft.Web/locations/managedApis'
     }
-    nonSecretParameterValues: {
+    parameterValues:{
       storageaccount: project_request_storage.properties.primaryEndpoints.queue
-    }
-    customParameterValues:{      
       sharedkey: project_request_storage.listKeys().keys[0].value
     }
     testLinks: [
