@@ -49,7 +49,7 @@ resource function_app_storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
       virtualNetworkRules: []
       ipRules: []
       defaultAction: 'Allow'
-      resourceAccessRules: [        
+      resourceAccessRules: [
         {
           resourceId: logic_app.id
           tenantId: tenant().tenantId
@@ -70,6 +70,20 @@ resource function_app_storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
       }
       keySource: 'Microsoft.Storage'
     }
+  }
+}
+
+resource storage_queue_data_contributor 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
+  scope: subscription()
+  name: '974c5e8b-45b9-4653-ba55-5f855dd0fb88'
+}
+
+resource userRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  scope: function_app_storage
+  name: guid(storage_queue_data_contributor.id)
+  properties: {
+    roleDefinitionId: storage_queue_data_contributor.id
+    principalId: logic_app.identity.principalId
   }
 }
 
