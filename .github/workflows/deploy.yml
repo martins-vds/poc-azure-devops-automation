@@ -227,4 +227,4 @@ jobs:
       uses: azure/CLI@v2
       with:
         inlineScript: |
-          az functionapp deploy --resource-group ${{ vars.RG_NAME }} --name ${{ needs.prod_deploy_infra.outputs.logic_app_name }} --src-path ./logic_app/azure.parameters.json --type static --target-path parameters.json --restart true --clean true
+          az functionapp deploy --resource-group ${{ vars.RG_NAME }} --name ${{ needs.prod_deploy_infra.outputs.logic_app_name }} --src-path ./logic_app/azure.parameters.json --type static --target-path parameters.json
