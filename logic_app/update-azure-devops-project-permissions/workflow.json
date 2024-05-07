@@ -257,7 +257,7 @@
                         }
                     },
                     "method": "get",
-                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/queues/@{encodeURIComponent('new-requests-queue')}/message_trigger"
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent(appsetting('azurequeues_endpointUri')))}/queues/@{encodeURIComponent(appsetting('azurequeues_queueName'))}/message_trigger"
                 },
                 "recurrence": {
                     "interval": 30,
