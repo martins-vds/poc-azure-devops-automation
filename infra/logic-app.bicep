@@ -2,7 +2,6 @@ param name string
 param location string
 param app_insights_id string
 param app_insights_instrumentation_key string
-param app_insights_connection_string string
 
 var sp_name = '${name}-logic-sp'
 var storage_name = '${name}logicstg'
