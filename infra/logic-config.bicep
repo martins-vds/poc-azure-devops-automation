@@ -38,10 +38,6 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
       id: subscriptionResourceId('Microsoft.Web/locations/managedApis', location, 'azurequeues')
       type: 'Microsoft.Web/locations/managedApis'
     }
-    parameterValueSet: {
-      name: 'managedIdentityAuth'
-      values: {}
-    }
     testLinks: [
       {
         requestUri: uri(
@@ -60,9 +56,9 @@ resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
   properties: {
     function_url: function_app.properties.defaultHostName
     function_key: listkeys('${function_app.id}/host/default', function_app.apiVersion).functionKeys.default
-    'azurequeues-connectionId': project_request_queue_connection.id
-    'azurequeues-apiConnection': '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue_connection_name}'
-    'azurequeues-url': project_request_storage.properties.primaryEndpoints.queue
+    azurequeues_connectionId: project_request_queue_connection.id
+    azurequeues_apiId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue_connection_name}'
+    azurequeues_connectionKey: project_request_storage.listKeys().keys[0].value
     AzureWebJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
     FUNCTIONS_EXTENSION_VERSION: '~4'
   }

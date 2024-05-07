@@ -1,16 +1,4 @@
 {
-  "blob_auth": {
-    "type": "object",
-    "value": {
-      "type": "Raw",
-      "scheme": "Key",
-      "parameter": "@appsetting('azurequeues-connectionKey')"
-    }
-  },
-  "azurequeues-connectionProperties": {
-    "type": "object",
-    "value": {}
-  },
   "function_key": {
     "type": "String",
     "value": "@appsetting('function_key')"
@@ -19,16 +7,21 @@
     "type": "String",
     "value": "@appsetting('function_url')"
   },
-  "azurequeues-apiConnection": {
+  "azurequeues-apiId": {
     "type": "String",
-    "value": "@appsetting('azurequeues-apiConnection')"
+    "value": "@appsetting('azurequeues_apiId')"
   },
-  "azurequeues-connectionKey": {
+  "azurequeues_connectionId": {
     "type": "String",
-    "value": "@appsetting('azurequeues-connectionKey')"
+    "value": "@appsetting('azurequeues_connectionId')"
   },
-  "azurequeues-connectionId": {
-    "type": "String",
-    "value": "@appsetting('azurequeues-connectionId')"
+  "azurequeues_authentication": {
+    "type": "Raw",
+    "scheme": "Key",
+    "parameter": "@appsetting('azurequeues_connectionKey')"
+  },
+  "azurequeues_connectionProperties": {
+    "type": "object",
+    "value": {}
   }
 }

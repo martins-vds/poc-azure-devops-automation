@@ -3,13 +3,13 @@
   "managedApiConnections": {
     "azurequeues": {
       "api": {
-        "id": "@parameters('azurequeues-apiConnection')"
+        "id": "@parameters('azurequeues_apiId')"
       },
       "connection": {
-        "id": "@parameters('azurequeues-connectionId')"
+        "id": "@parameters('azurequeues_connectionId')"
       },      
-      "authentication": "@parameters('blob_auth')",
-      "connectionProperties": "@parameters('azurequeues-connectionProperties')"
+      "authentication": "@parameters('azurequeues_authentication')",
+      "connectionProperties": "@parameters('azurequeues_connectionProperties')"
     }
   }
 }

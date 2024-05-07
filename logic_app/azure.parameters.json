@@ -1,19 +1,4 @@
 {
-  "blob_auth": {
-    "type": "object",
-    "value": {
-      "type": "ManagedServiceIdentity"
-    }
-  },
-  "azurequeues-connectionProperties": {
-    "type": "object",
-    "value": {
-      "authentication": {
-        "audience": "@appsetting('azurequeues-url')",
-        "type": "ManagedServiceIdentity"
-      }
-    }
-  },
   "function_key": {
     "type": "String",
     "value": "@appsetting('function_key')"
@@ -22,16 +7,27 @@
     "type": "String",
     "value": "@appsetting('function_url')"
   },
-  "azurequeues-apiConnection": {
+  "azurequeues-apiId": {
     "type": "String",
-    "value": "@appsetting('azurequeues-apiConnection')"
+    "value": "@appsetting('azurequeues_apiId')"
   },
-  "azurequeues-connectionKey": {
+  "azurequeues_connectionId": {
     "type": "String",
-    "value": "@appsetting('azurequeues-connectionKey')"
+    "value": "@appsetting('azurequeues_connectionId')"
   },
-  "azurequeues-connectionId": {
-    "type": "String",
-    "value": "@appsetting('azurequeues-connectionId')"
+  "azurequeues_authentication": {
+    "type": "object",
+    "value": {
+      "type": "ManagedServiceIdentity"
+    }
+  },
+  "azurequeues_connectionProperties": {
+    "type": "object",
+    "value": {
+      "authentication": {
+        "audience": "https://storage.azure.com/",
+        "type": "ManagedServiceIdentity"
+      }
+    }
   }
 }
