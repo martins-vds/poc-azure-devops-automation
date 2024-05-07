@@ -3,11 +3,16 @@ param project_request_queue_name string
 param location string = resourceGroup().location
 
 var poc_name_sanitized = take(toLower(replace(replace(poc_name, '-', ''), ' ', '')), 10)
+var app_insights_name = poc_name_sanitized
 var function_app_name = '${poc_name_sanitized}-func'
 var logic_app_name = '${poc_name_sanitized}-logic'
 var logic_app_storage_name = '${poc_name_sanitized}logicstg'
 var project_request_storage_name = '${poc_name_sanitized}funcstg'
 var project_request_queue_connection_name = 'azurequeues'
+
+resource app_insights 'microsoft.insights/components@2020-02-02' existing = {
+  name: app_insights_name
+}
 
 resource function_app 'Microsoft.Web/sites@2023-01-01' existing = {
   name: function_app_name
@@ -81,6 +86,10 @@ resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
     azurequeues_connectionId: project_request_queue_connection.id
     azurequeues_apiId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue_connection_name}'
     azurequeues_connectionKey: project_request_storage.listKeys().keys[0].value  
-    azurequeues_endpointUri: project_request_storage.properties.primaryEndpoints.queue  
+    azurequeues_endpointUri: project_request_storage.properties.primaryEndpoints.queue
+    APPINSIGHTS_INSTRUMENTATIONKEY: app_insights.properties.InstrumentationKey
+    APPLICATIONINSIGHTS_CONNECTION_STRING: app_insights.properties.ConnectionString
+    AzureWebJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+    FUNCTIONS_EXTENSION_VERSION: '~4'
   }
 }

@@ -87,16 +87,5 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
   }
 }
 
-resource app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
-  parent: logic_app
-  name: 'appsettings'
-  properties: {
-    APPINSIGHTS_INSTRUMENTATIONKEY: app_insights_instrumentation_key
-    APPLICATIONINSIGHTS_CONNECTION_STRING: app_insights_connection_string
-    AzureWebJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${storage.name};AccountKey=${storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
-    FUNCTIONS_EXTENSION_VERSION: '~4'
-  }
-}
-
 output name string = logic_app.name
 output principal_id string = logic_app.identity.principalId
