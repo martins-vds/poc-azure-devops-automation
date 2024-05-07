@@ -1,14 +1,11 @@
 param name string
 param location string
-param app_insights_name string
+param app_insights_id string
+param app_insights_instrumentation_key string
 
 var sp_name = '${name}-logic-sp'
 var storage_name = '${name}logicstg'
 var logic_app_name = '${name}-logic'
-
-resource app_insights 'microsoft.insights/components@2020-02-02' existing = {
-  name: app_insights_name
-}
 
 resource sp 'Microsoft.Web/serverfarms@2023-01-01' = {
   name: sp_name
@@ -75,20 +72,14 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
   identity: {
     type: 'SystemAssigned'
   }
+  tags: {
+    'hidden-link: /app-insights-resource-id': app_insights_id
+    'hidden-link: /app-insights-instrumentation-key': app_insights_instrumentation_key
+  }
   properties: {
     serverFarmId: sp.id
     siteConfig: {
-      functionsRuntimeScaleMonitoringEnabled: false
-      appSettings: [
-        {
-          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: app_insights.properties.InstrumentationKey
-        }
-        {
-          name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
-          value: app_insights.properties.ConnectionString
-        }
-      ]
+      functionsRuntimeScaleMonitoringEnabled: false      
     }
     httpsOnly: true
     keyVaultReferenceIdentity: 'SystemAssigned'

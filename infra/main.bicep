@@ -19,7 +19,8 @@ module logic_app 'logic-app.bicep' = {
   params: {
     location: location
     name: poc_name_sanitized
-    app_insights_name: telemetry.outputs.name
+    app_insights_id: telemetry.outputs.id
+    app_insights_instrumentation_key: telemetry.outputs.instrumentation_key
   }
 }
 
