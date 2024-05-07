@@ -82,7 +82,8 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
       numberOfWorkers: 1
       functionAppScaleLimit: 0
       minimumElasticInstanceCount: 1
-      preWarmedInstanceCount: 1    
+      preWarmedInstanceCount: 1
+      functionsRuntimeScaleMonitoringEnabled: true    
     }
     httpsOnly: true
     keyVaultReferenceIdentity: 'SystemAssigned'
