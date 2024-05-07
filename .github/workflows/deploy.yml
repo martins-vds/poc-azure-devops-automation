@@ -28,6 +28,7 @@ jobs:
       function_app_url: ${{ steps.deploy_infra.outputs.function_app_url }}
       logic_app_name: ${{ steps.deploy_infra.outputs.logic_app_name }}
       web_app_name: ${{ steps.deploy_infra.outputs.web_app_name }}
+      request_queue_name: ${{ steps.deploy_infra.outputs.request_queue_name }}
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@v4.1.1
@@ -196,7 +197,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ vars.RG_NAME }}
         template: ./infra/logic-config.bicep
-        parameters: 'poc_name=${{ vars.POC_NAME }}'
+        parameters: 'poc_name=${{ vars.POC_NAME }} project_request_queue_name=${{ needs.prod_deploy_infra.outputs.request_queue_name }}'
         failOnStdErr: false
         deploymentName: 'config-logic-app-${{ github.run_id }}'
         scope: 'resourcegroup'

@@ -57,3 +57,4 @@ output function_app_name string = function_app.outputs.name
 output function_app_url string = function_app.outputs.url
 output logic_app_name string = logic_app.outputs.name
 output web_app_name string = web_app.outputs.name
+output request_queue_name string = request_storage.outputs.request_queue_name

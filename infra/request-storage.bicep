@@ -76,3 +76,4 @@ resource project_requests_table 'Microsoft.Storage/storageAccounts/tableServices
 }
 
 output name string = storage.name
+output request_queue_name string = project_request_queue.name
