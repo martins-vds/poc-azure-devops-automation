@@ -16,7 +16,7 @@ resource app_insights 'microsoft.insights/components@2020-02-02' existing = {
 }
 
 resource requests_storage 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
-  name: requests_storage_name  
+  name: requests_storage_name
 }
 
 resource storage 'Microsoft.Storage/storageAccounts@2023-01-01' = {
@@ -143,9 +143,21 @@ resource function_app 'Microsoft.Web/sites@2023-01-01' = {
           name: 'WEBSITE_RUN_FROM_PACKAGE'
           value: '1'
         }
+        {
+          name: 'WEBSITE_CONTENTAZUREFILECONNECTIONSTRING'
+          value: 'DefaultEndpointsProtocol=https;AccountName=${storage.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storage.listKeys().keys[0].value}'
+        }
+        {
+          name: 'WEBSITE_CONTENTSHARE'
+          value: toLower(function_app_name)
+        }
       ]
       cors: {
-        allowedOrigins: cors
+        allowedOrigins: [
+          for domain in cors: startsWith(domain, 'https://') || startsWith(domain, 'http://')
+            ? domain
+            : 'https://${domain}'
+        ]
       }
     }
     scmSiteAlsoStopped: false
