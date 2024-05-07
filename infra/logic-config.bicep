@@ -3,8 +3,8 @@ param project_request_queue_name string
 param location string = resourceGroup().location
 
 var poc_name_sanitized = take(toLower(replace(replace(poc_name, '-', ''), ' ', '')), 10)
-var function_app_name = '${poc_name}-func'
-var logic_app_name = '${poc_name}-logic'
+var function_app_name = '${poc_name_sanitized}-func'
+var logic_app_name = '${poc_name_sanitized}-logic'
 var logic_app_storage_name = '${poc_name_sanitized}logicstg'
 var project_request_storage_name = '${poc_name_sanitized}funcstg'
 var project_request_queue_connection_name = 'azurequeues'
