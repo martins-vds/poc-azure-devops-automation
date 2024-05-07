@@ -21,6 +21,7 @@ module logic_app 'logic-app.bicep' = {
     name: poc_name_sanitized
     app_insights_id: telemetry.outputs.id
     app_insights_instrumentation_key: telemetry.outputs.instrumentation_key
+    app_insights_connection_string: telemetry.outputs.connection_string
   }
 }
 

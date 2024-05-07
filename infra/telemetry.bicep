@@ -23,3 +23,4 @@ resource app_insights 'microsoft.insights/components@2020-02-02' = {
 output name string = app_insights.name
 output id string = app_insights.id
 output instrumentation_key string = app_insights.properties.InstrumentationKey
+output connection_string string = app_insights.properties.ConnectionString
