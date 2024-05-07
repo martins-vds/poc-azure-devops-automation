@@ -91,5 +91,10 @@ resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
     APPLICATIONINSIGHTS_CONNECTION_STRING: app_insights.properties.ConnectionString
     AzureWebJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
     FUNCTIONS_EXTENSION_VERSION: '~4'
+    FUNCTIONS_WORKER_RUNTIME: 'node'
+    APP_KIND: 'workflowApp'
+    WEBSITE_CONTENTSHARE: logic_app.name
+    WEBSITE_NODE_DEFAULT_VERSION: '~18'
+    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
   }
 }

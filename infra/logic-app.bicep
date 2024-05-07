@@ -79,7 +79,10 @@ resource logic_app 'Microsoft.Web/sites@2023-01-01' = {
   properties: {
     serverFarmId: sp.id
     siteConfig: {
-      functionsRuntimeScaleMonitoringEnabled: false         
+      numberOfWorkers: 1
+      functionAppScaleLimit: 0
+      minimumElasticInstanceCount: 1
+      preWarmedInstanceCount: 1    
     }
     httpsOnly: true
     keyVaultReferenceIdentity: 'SystemAssigned'
