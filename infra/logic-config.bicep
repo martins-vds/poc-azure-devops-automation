@@ -85,8 +85,8 @@ resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
     azurequeues_queueName: project_request_queue_name
     azurequeues_connectionId: project_request_queue_connection.id
     azurequeues_apiId: '/subscriptions/${subscription().subscriptionId}/providers/Microsoft.Web/locations/${location}/managedApis/${project_request_queue_connection_name}'
-    azurequeues_connectionKey: project_request_storage.listKeys().keys[0].value  
-    azurequeues_endpointUri: project_request_storage.properties.primaryEndpoints.queue
+    azurequeues_connectionKey: project_request_storage.listKeys().keys[0].value
+    azurequeues_storageAccountName: project_request_storage.name
     APPINSIGHTS_INSTRUMENTATIONKEY: app_insights.properties.InstrumentationKey
     APPLICATIONINSIGHTS_CONNECTION_STRING: app_insights.properties.ConnectionString
     AzureWebJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'

@@ -23,5 +23,13 @@
   "azurequeues_connectionProperties": {
     "type": "object",
     "value": {}
+  },
+  "azurequeues_queueName": {
+    "type": "String",
+    "value": "@appsetting('azurequeues_queueName')"
+  },
+  "azurequeues_storageAccountName": {
+    "type": "String",
+    "value": "@appsetting('azurequeues_storageAccountName')"
   }
 }
