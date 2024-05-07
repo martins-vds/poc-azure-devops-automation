@@ -39,6 +39,12 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
       id: subscriptionResourceId('Microsoft.Web/locations/managedApis', location, 'azurequeues')
       type: 'Microsoft.Web/locations/managedApis'
     }
+    parameterValueSet: {
+      name: 'managedIdentityAuth'
+      values: {
+        token: {}
+      }
+    }
     testLinks: [
       {
         requestUri: uri(
@@ -48,6 +54,20 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
         method: 'get'
       }
     ]
+  }
+
+  resource accessPolices 'accessPolicies@2018-07-01-preview' = {
+    name: logic_app_name
+    location: location
+    properties: {
+      principal: {
+        type: 'ActiveDirectory'
+        identity: {
+          objectId: logic_app.identity.principalId
+          tenantId: subscription().tenantId
+        }
+      }
+    }
   }
 }
 
