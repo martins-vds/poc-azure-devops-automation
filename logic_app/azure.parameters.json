@@ -7,7 +7,7 @@
     "type": "String",
     "value": "@appsetting('function_url')"
   },
-  "azurequeues-apiId": {
+  "azurequeues_apiId": {
     "type": "String",
     "value": "@appsetting('azurequeues_apiId')"
   },
