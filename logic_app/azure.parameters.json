@@ -13,15 +13,6 @@
       "type": "ManagedServiceIdentity"
     }
   },
-  "azurequeues_connectionProperties": {
-    "type": "object",
-    "value": {
-      "authentication": {
-        "audience": "https://storage.azure.com/",
-        "type": "ManagedServiceIdentity"
-      }
-    }
-  },
   "azurequeues_queueName": {
     "type": "String",
     "value": "@appsetting('AZUREQUEUES_QUEUENAME')"
