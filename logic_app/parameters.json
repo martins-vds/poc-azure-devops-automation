@@ -8,9 +8,12 @@
     "value": "@appsetting('function_url')"
   },
   "azurequeues_authentication": {
-    "type": "Raw",
-    "scheme": "Key",
-    "parameter": "@appsetting('azurequeues_connectionKey')"
+    "type": "object",
+    "value": {
+      "type": "Raw",
+      "scheme": "Key",
+      "parameter": "@appsetting('azurequeues_connectionKey')"
+    }
   },
   "azurequeues_connectionProperties": {
     "type": "object",
