@@ -4,6 +4,8 @@ pushd app
 
 npm install
 
+cp .env.example .env
+
 popd
 
 pushd api
