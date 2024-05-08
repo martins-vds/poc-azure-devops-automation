@@ -50,18 +50,9 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
         token: {}
       }
     }
-    testLinks: [
-      {
-        requestUri: uri(
-          environment().resourceManager,
-          '/subscriptions/${subscription().subscriptionId}/resourceGroups/${resourceGroup().name}/providers/Microsoft.Web/connections/${project_request_queue_connection_name}/extensions/proxy/testConnection?api-version=2016-06-01'
-        )
-        method: 'get'
-      }
-    ]
   }
 
-  resource accessPolices 'accessPolicies@2018-07-01-preview' = {
+  resource accessPolices 'accessPolicies@2016-06-01' = {
     name: logic_app_name
     location: location
     properties: {
@@ -96,5 +87,6 @@ resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
     WEBSITE_CONTENTSHARE: logic_app.name
     WEBSITE_NODE_DEFAULT_VERSION: '~18'
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+    BLOB_CONNECTION_RUNTIMEURL: project_request_queue_connection.properties.connectionRuntimeUrl
   }
 }

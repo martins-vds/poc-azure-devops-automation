@@ -7,9 +7,10 @@
       },
       "connection": {
         "id": "@parameters('azurequeues_connectionId')"
-      },      
+      },
       "authentication": "@parameters('azurequeues_authentication')",
-      "connectionProperties": "@parameters('azurequeues_connectionProperties')"
+      "connectionProperties": "@parameters('azurequeues_connectionProperties')",
+      "connectionRuntimeUrl": "@appsetting('BLOB_CONNECTION_RUNTIMEURL')"
     }
   }
 }
