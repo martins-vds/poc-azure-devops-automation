@@ -3,10 +3,10 @@
   "managedApiConnections": {
     "azurequeues": {
       "api": {
-        "id": "@parameters('azurequeues_apiId')"
+        "id": "/subscriptions/@appsetting('WORKFLOWS_SUBSCRIPTION_ID')/providers/Microsoft.Web/locations/@appsetting('WORKFLOWS_LOCATION_NAME')/managedApis/@appsetting('WORKFLOWS_QUEUE_CONNECTION_NAME')"
       },
       "connection": {
-        "id": "@parameters('azurequeues_connectionId')"
+        "id": "/subscriptions/@appsetting('WORKFLOWS_SUBSCRIPTION_ID')/resourceGroups/@appsetting('WORKFLOWS_RESOURCE_GROUP_NAME')/providers/Microsoft.Web/connections/@appsetting('WORKFLOWS_QUEUE_CONNECTION_NAME')"
       },
       "authentication": "@parameters('azurequeues_authentication')",
       "connectionProperties": "@parameters('azurequeues_connectionProperties')",
