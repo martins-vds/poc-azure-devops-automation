@@ -85,7 +85,7 @@ resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
     AzureWebJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
     BLOB_CONNECTION_RUNTIMEURL: project_request_queue_connection.properties.connectionRuntimeUrl
     FUNCTION_KEY: listkeys('${function_app.id}/host/default', function_app.apiVersion).functionKeys.default
-    FUNCTION_URL: function_app.properties.defaultHostName
+    FUNCTION_URL: 'https://${function_app.properties.defaultHostName}'
     FUNCTIONS_EXTENSION_VERSION: '~4'
     FUNCTIONS_WORKER_RUNTIME: 'node'
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
