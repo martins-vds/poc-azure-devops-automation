@@ -91,12 +91,10 @@ function App() {
   return (
     <>
       <CssBaseline />
-      <Container maxWidth={false} sx={{
-        width: '50vw',
-        height: '100vh',
+      <Container maxWidth={'xl'} sx={{       
+        height: '80vh',
         display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: "white",
+        flexDirection: 'column',      
       }}>
         <Typography variant="h6" sx={{
           marginTop: '20px',
