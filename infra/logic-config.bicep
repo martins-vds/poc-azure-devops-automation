@@ -50,6 +50,12 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
         token: {}
       }
     }
+    testLinks: [
+      {
+        method: 'get'
+        requestUri: '${environment().resourceManager}/subscriptions/${subscription().id}/resourceGroups/${resourceGroup().name}/providers/Microsoft.Web/connections/${project_request_queue_connection_name}/extensions/proxy/testConnection?api-version=2018-07-01-preview'
+      }
+    ]
   }
 
   resource accessPolices 'accessPolicies@2016-06-01' = {
