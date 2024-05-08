@@ -7,7 +7,7 @@ var app_insights_name = poc_name_sanitized
 var function_app_name = '${poc_name_sanitized}-func'
 var logic_app_name = '${poc_name_sanitized}-logic'
 var logic_app_storage_name = '${poc_name_sanitized}logicstg'
-var project_request_storage_name = '${poc_name_sanitized}funcstg'
+var project_request_storage_name = '${poc_name_sanitized}requeststg'
 var project_request_queue_connection_name = 'azurequeues'
 
 resource app_insights 'microsoft.insights/components@2020-02-02' existing = {
