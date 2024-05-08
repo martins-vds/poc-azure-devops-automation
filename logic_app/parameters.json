@@ -15,10 +15,6 @@
       "parameter": "@appsetting('AZUREQUEUES_CONNECTIONKEY')"
     }
   },
-  "azurequeues_connectionProperties": {
-    "type": "object",
-    "value": {}
-  },
   "azurequeues_queueName": {
     "type": "String",
     "value": "@appsetting('AZUREQUEUES_QUEUENAME')"
