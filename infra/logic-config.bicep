@@ -71,24 +71,22 @@ resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
   parent: logic_app
   name: 'appsettings'
   properties: {
-    function_url: function_app.properties.defaultHostName
-    function_key: listkeys('${function_app.id}/host/default', function_app.apiVersion).functionKeys.default
-    azurequeues_queueName: project_request_queue_name
-    azurequeues_connectionKey: project_request_storage.listKeys().keys[0].value
-    azurequeues_storageAccountName: project_request_storage.name
     APPINSIGHTS_INSTRUMENTATIONKEY: app_insights.properties.InstrumentationKey
     APPLICATIONINSIGHTS_CONNECTION_STRING: app_insights.properties.ConnectionString
-    AzureWebJobsStorage: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+    AZUREQUEUES_CONNECTIONKEY: project_request_storage.listKeys().keys[0].value
+    AZUREQUEUES_QUEUENAME: project_request_queue_name
+    AZUREQUEUES_STORAGEACCOUNTNAME: project_request_storage.name
+    BLOB_CONNECTION_RUNTIMEURL: project_request_queue_connection.properties.connectionRuntimeUrl
+    FUNCTION_KEY: listkeys('${function_app.id}/host/default', function_app.apiVersion).functionKeys.default
+    FUNCTION_URL: function_app.properties.defaultHostName
     FUNCTIONS_EXTENSION_VERSION: '~4'
     FUNCTIONS_WORKER_RUNTIME: 'node'
-    APP_KIND: 'workflowApp'
+    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
     WEBSITE_CONTENTSHARE: logic_app.name
     WEBSITE_NODE_DEFAULT_VERSION: '~18'
-    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: 'DefaultEndpointsProtocol=https;AccountName=${logic_app_storage.name};AccountKey=${logic_app_storage.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
-    BLOB_CONNECTION_RUNTIMEURL: project_request_queue_connection.properties.connectionRuntimeUrl
-    WORKFLOWS_SUBSCRIPTION_ID: subscription().subscriptionId
-    WORKFLOWS_RESOURCE_GROUP_NAME: resourceGroup().name
     WORKFLOWS_LOCATION_NAME: location
     WORKFLOWS_QUEUE_CONNECTION_NAME: project_request_queue_connection_name
+    WORKFLOWS_RESOURCE_GROUP_NAME: resourceGroup().name
+    WORKFLOWS_SUBSCRIPTION_ID: subscription().subscriptionId
   }
 }

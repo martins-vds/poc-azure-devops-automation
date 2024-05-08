@@ -1,11 +1,11 @@
 {
   "function_key": {
     "type": "String",
-    "value": "@appsetting('function_key')"
+    "value": "@appsetting('FUNCTION_KEY')"
   },
   "function_url": {
     "type": "String",
-    "value": "@appsetting('function_url')"
+    "value": "@appsetting('FUNCTION_URL')"
   },
   "azurequeues_authentication": {
     "type": "object",
@@ -24,10 +24,10 @@
   },
   "azurequeues_queueName": {
     "type": "String",
-    "value": "@appsetting('azurequeues_queueName')"
+    "value": "@appsetting('AZUREQUEUES_QUEUENAME')"
   },
   "azurequeues_storageAccountName": {
     "type": "String",
-    "value": "@appsetting('azurequeues_storageAccountName')"
+    "value": "@appsetting('AZUREQUEUES_STORAGEACCOUNTNAME')"
   }
 }
