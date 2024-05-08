@@ -7,12 +7,6 @@
     "type": "String",
     "value": "@appsetting('FUNCTION_URL')"
   },
-  "azurequeues_authentication": {
-    "type": "object",
-    "value": {
-      "type": "ManagedServiceIdentity"
-    }
-  },
   "azurequeues_queueName": {
     "type": "String",
     "value": "@appsetting('AZUREQUEUES_QUEUENAME')"
@@ -20,5 +14,20 @@
   "azurequeues_storageAccountName": {
     "type": "String",
     "value": "@appsetting('AZUREQUEUES_STORAGEACCOUNTNAME')"
+  },
+  "azurequeues_authentication": {
+    "type": "object",
+    "value": {
+      "type": "ManagedServiceIdentity"
+    }
+  },
+  "azurequeues_connectionProperties": {
+    "type": "object",
+    "value": {
+      "authentication": {
+        "audience": "https://storage.azure.com/",
+        "type": "ManagedServiceIdentity"
+      }
+    }
   }
 }
