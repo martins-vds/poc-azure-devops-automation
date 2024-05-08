@@ -7,14 +7,6 @@
     "type": "String",
     "value": "@appsetting('function_url')"
   },
-  "azurequeues_apiId": {
-    "type": "String",
-    "value": "@appsetting('azurequeues_apiId')"
-  },
-  "azurequeues_connectionId": {
-    "type": "String",
-    "value": "@appsetting('azurequeues_connectionId')"
-  },
   "azurequeues_authentication": {
     "type": "Raw",
     "scheme": "Key",
