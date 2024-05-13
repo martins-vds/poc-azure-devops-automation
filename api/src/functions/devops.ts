@@ -54,9 +54,9 @@ async function getProcessTemplates(request: HttpRequest, context: InvocationCont
 async function requestNewProject(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     const payload = (await request.json() as any);
 
-    const org = payload.organization;
-    const project = payload.projectName;
-    const processId = payload.processId;
+    const org = payload.organization?.trim();
+    const project = payload.projectName?.trim();
+    const processId = payload.processId?.trim();
 
     const id = randomUUID();
 

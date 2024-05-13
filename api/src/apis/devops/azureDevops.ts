@@ -39,8 +39,10 @@ const getOrganizations = async function (): Promise<string[]> {
 }
 
 const getProcessTemplates = async function (organization: string): Promise<Process[]> {
+    const sanitizedOrganization = organization.trim();
+
     const processTemplates = await devApi.request({
-        url: `/${organization}/_apis/process/processes?api-version=7.2-preview.1`,
+        url: `/${sanitizedOrganization}/_apis/process/processes?api-version=7.2-preview.1`,
         method: "GET",
     });
 
@@ -53,17 +55,20 @@ const getProcessTemplates = async function (organization: string): Promise<Proce
 }
 
 const createProject = async function (organization: string, processId: string, projectName: string): Promise<void> {
-    const project = await getProject(organization, projectName);
+    const sanitizedOrganization = organization.trim();
+    const sanitizedProjectName = projectName.trim();
+    
+    const project = await getProject(sanitizedOrganization, sanitizedProjectName);
 
     if (project) {
         return project;
     }
 
     const operation = await devApi.request({
-        url: `/${organization}/_apis/projects?api-version=7.2-preview.4`,
+        url: `/${sanitizedOrganization}/_apis/projects?api-version=7.2-preview.4`,
         method: "POST",
         data: {
-            name: projectName,
+            name: sanitizedProjectName,
             description: "Created by Azure Function",
             visibility: "private",
             capabilities: {
@@ -79,21 +84,24 @@ const createProject = async function (organization: string, processId: string, p
 
     await waitOperation(operation.data.url);
 
-    return await getProject(organization, projectName);
+    return await getProject(sanitizedOrganization, sanitizedProjectName);
 }
 
 const removeRepositoryCreationPermissions = async function (organization: string, projectName: string): Promise<void> {
-    const project = await getProject(organization, projectName);
-    const projectDescriptor = await getProjectDescriptor(organization, project.id);
-    const groups = await getProjectGroups(organization, projectDescriptor);
+    const sanitizedOrganization = organization.trim();
+    const sanitizedProjectName = projectName.trim();
+    
+    const project = await getProject(sanitizedOrganization, sanitizedProjectName);
+    const projectDescriptor = await getProjectDescriptor(sanitizedOrganization, project.id);
+    const groups = await getProjectGroups(sanitizedOrganization, projectDescriptor);
     const projectValidUsersGroup = groups.find((group: any) => group.displayName === "Project Valid Users");
-    const projectValidUsersGroupIdentity = await getIdentity(organization, projectValidUsersGroup.descriptor);
-    const gitSecurityNamespace = await getSecurityNamespace(organization, "Git Repositories");
+    const projectValidUsersGroupIdentity = await getIdentity(sanitizedOrganization, projectValidUsersGroup.descriptor);
+    const gitSecurityNamespace = await getSecurityNamespace(sanitizedOrganization, "Git Repositories");
     const createRepositoryPermission = gitSecurityNamespace.actions.find((action: any) => action.name === "CreateRepository");
     const token = `repoV2/${project.id}`
     const deny = true;
 
-    updateAccessControlEntries(organization, gitSecurityNamespace.namespaceId, token, projectValidUsersGroupIdentity.descriptor, createRepositoryPermission.bit, deny);
+    updateAccessControlEntries(sanitizedOrganization, gitSecurityNamespace.namespaceId, token, projectValidUsersGroupIdentity.descriptor, createRepositoryPermission.bit, deny);
 }
 
 const waitOperation = async function (operationUrl: string): Promise<void> {

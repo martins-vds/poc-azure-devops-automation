@@ -39,9 +39,9 @@ async function submitProjectRequest(organization: string, processId: string, pro
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            organization: organization,
-            projectName: projectName,
-            processId: processId
+            organization: organization.trim(),
+            projectName: projectName.trim(),
+            processId: processId.trim()
         })
     });
 
