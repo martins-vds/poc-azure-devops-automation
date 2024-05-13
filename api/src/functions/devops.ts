@@ -97,7 +97,7 @@ async function updateProjectRequest(request: HttpRequest, context: InvocationCon
     const requestId = request.params.requestId;
     const payload = <ProjectRequest>(await request.json());
 
-    tableInput.filter = `rowKey eq '${requestId}'`;
+    tableInput.filter = `RowKey eq '${requestId}'`;
     tableInput.take = 1;
 
     const projectRequest = <ProjectRequest>(await context.extraInputs.get(tableInput))[0];
