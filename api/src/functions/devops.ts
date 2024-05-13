@@ -102,25 +102,30 @@ async function updateProjectRequest(request: HttpRequest, context: InvocationCon
 
     const projectRequest = <ProjectRequest>(await context.extraInputs.get(tableInput))[0];
 
-    if (projectRequest) {
-        const { url: updatedUrl, status: updatedStatus, statusMessage } = payload;
-
-        const { PartitionKey, RowKey, ...existing } = projectRequest;
-
-        tableClient.updateEntity({
-            partitionKey: projectRequest.PartitionKey,
-            rowKey: projectRequest.RowKey,
-            ...existing,
-            url: updatedUrl,
-            status: updatedStatus,
-            statusMessage: statusMessage,
-        }, "Merge");
+    if (!projectRequest) {
+        return {
+            status: 404
+        };
     }
+
+    context.info(`Updating project request ${projectRequest.RowKey} with status '${payload.status}'`);
+
+    const { url: updatedUrl, status: updatedStatus, statusMessage } = payload;
+
+    const { PartitionKey, RowKey, ...existing } = projectRequest;
+
+    tableClient.updateEntity({
+        partitionKey: projectRequest.PartitionKey,
+        rowKey: projectRequest.RowKey,
+        ...existing,
+        url: updatedUrl,
+        status: updatedStatus,
+        statusMessage: statusMessage,
+    }, "Merge");
 
     return {
         status: 204
     };
-
 }
 
 async function createProject(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
