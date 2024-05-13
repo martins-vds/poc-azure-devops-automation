@@ -81,6 +81,9 @@ async function requestNewProject(request: HttpRequest, context: InvocationContex
 }
 
 async function projectRequests(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+    tableInput.filter = undefined;
+    tableInput.take = undefined;
+        
     const entries = <ProjectRequest[]>(await context.extraInputs.get(tableInput));
 
     const requests = entries.map((entry: ProjectRequest) => {
