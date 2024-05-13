@@ -124,7 +124,7 @@
             "Set_Request_Status_to_In_Progress": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['id']}?code=@{parameters('function_key')}",
+                    "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['organization']}/@{body('Project_Request')?['id']}?code=@{parameters('function_key')}",
                     "method": "PATCH",
                     "body": {
                         "status": "In Progress"
@@ -182,7 +182,7 @@
             "Complete_Request": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['id']}?code=@{parameters('function_key')}",
+                    "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['organization']}/@{body('Project_Request')?['id']}?code=@{parameters('function_key')}",
                     "method": "PATCH",
                     "body": {
                         "status": "Completed",
@@ -203,7 +203,7 @@
             "Set_Request_Status_to_Error": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['id']}?code=@{parameters('function_key')}",
+                    "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['organization']}/@{body('Project_Request')?['id']}?code=@{parameters('function_key')}",
                     "method": "PATCH",
                     "body": {
                         "status": "Failed",
@@ -225,7 +225,7 @@
             "Set_Request_Status_to_Error_2": {
                 "type": "Http",
                 "inputs": {
-                    "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['id']}?code=@{parameters('function_key')}",
+                    "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['organization']}/@{body('Project_Request')?['id']}?code=@{parameters('function_key')}",
                     "method": "PATCH",
                     "body": {
                         "status": "Failed",

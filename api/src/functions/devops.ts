@@ -81,9 +81,6 @@ async function requestNewProject(request: HttpRequest, context: InvocationContex
 }
 
 async function projectRequests(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-    tableInput.filter = undefined;
-    tableInput.take = undefined;
-        
     const entries = <ProjectRequest[]>(await context.extraInputs.get(tableInput));
 
     const requests = entries.map((entry: ProjectRequest) => {
@@ -97,13 +94,11 @@ async function projectRequests(request: HttpRequest, context: InvocationContext)
 }
 
 async function updateProjectRequest(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
-    const requestId = request.params.requestId;
+    const partitionKey = request.params.partitionKey;
+    const rowKey = request.params.rowKey;
     const payload = <ProjectRequest>(await request.json());
 
-    tableInput.filter = `RowKey eq '${requestId}'`;
-    tableInput.take = 1;
-
-    const projectRequest = <ProjectRequest>(await context.extraInputs.get(tableInput))[0];
+    const projectRequest = await tableClient.getEntity<ProjectRequest>(partitionKey, rowKey);
 
     if (!projectRequest) {
         return {
@@ -185,9 +180,8 @@ app.http('projectRequests', {
 
 app.http('updateRequestProject', {
     methods: ['PATCH'],
-    route: 'project-requests/{requestId}',
+    route: 'project-requests/{partitionKey}/{rowKey}',
     handler: updateProjectRequest,
-    extraInputs: [tableInput],
     authLevel: 'function'
 });
 
