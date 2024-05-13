@@ -19,7 +19,8 @@
 				"ms-azuretools.vscode-bicep",
 				"msazurermtools.azurerm-vscode-tools",
 				"ms-vscode.azurecli",
-				"humao.rest-client"
+				"humao.rest-client",
+				"ms-dotnettools.vscode-dotnet-runtime"
 			],
 			"settings": {
 				"dotnetAcquisitionExtension.existingDotnetPath": [
