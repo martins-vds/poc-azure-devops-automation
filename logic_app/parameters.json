@@ -26,5 +26,21 @@
   "azurequeues_connectionProperties": {
     "type": "object",
     "value": {}
+  },
+  "office365-ConnectionRuntimeUrl": {
+    "type": "String",
+    "value": "@appsetting('office365-ConnectionRuntimeUrl')"
+  },
+  "office365-Authentication": {
+    "type": "Object",
+    "value": {
+      "type": "Raw",
+      "scheme": "Key",
+      "parameter": "@appsetting('office365-connectionKey')"
+    }
+  },
+  "reviewers": {
+    "type": "String",
+    "value": "@appsetting('REVIEWERS')"
   }
 }

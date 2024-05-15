@@ -1,6 +1,7 @@
 param poc_name string
 param project_request_queue_name string
 param location string = resourceGroup().location
+param reviewers string
 
 var poc_name_sanitized = take(toLower(replace(replace(poc_name, '-', ''), ' ', '')), 10)
 var app_insights_name = poc_name_sanitized
@@ -95,5 +96,6 @@ resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
     WORKFLOWS_QUEUE_CONNECTION_NAME: project_request_queue_connection_name
     WORKFLOWS_RESOURCE_GROUP_NAME: resourceGroup().name
     WORKFLOWS_SUBSCRIPTION_ID: subscription().subscriptionId
+    REVIEWERS: reviewers
   }
 }

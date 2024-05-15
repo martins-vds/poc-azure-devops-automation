@@ -29,5 +29,9 @@
         "type": "ManagedServiceIdentity"
       }
     }
+  },
+  "reviewers": {
+    "type": "String",
+    "value": "@appsetting('REVIEWERS')"
   }
 }

@@ -131,7 +131,7 @@
                     }
                 },
                 "runAfter": {
-                    "Project_Request": [
+                    "Condition": [
                         "SUCCEEDED"
                     ]
                 },
@@ -242,6 +242,83 @@
                     "contentTransfer": {
                         "transferMode": "Chunked"
                     }
+                }
+            },
+            "Send_approval_email": {
+                "type": "ApiConnectionWebhook",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "office365"
+                        }
+                    },
+                    "body": {
+                        "NotificationUrl": "@{listCallbackUrl()}",
+                        "Message": {
+                            "To": "@parameters('reviewers')",
+                            "Body": "New Request Submitted.\n\nOrganization: @{body('Project_Request')?['organization']}\nProject name: @{body('Project_Request')?['projectName']}\n",
+                            "Importance": "Normal",
+                            "HideHTMLMessage": false,
+                            "ShowHTMLConfirmationDialog": false,
+                            "Subject": "Approval Request",
+                            "Options": "Approve, Reject"
+                        }
+                    },
+                    "path": "/approvalmail/$subscriptions"
+                },
+                "runAfter": {
+                    "Project_Request": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Condition": {
+                "type": "If",
+                "expression": {
+                    "and": [
+                        {
+                            "equals": [
+                                "@body('Send_approval_email')?['SelectedOption']",
+                                "Approved"
+                            ]
+                        }
+                    ]
+                },
+                "actions": {},
+                "else": {
+                    "actions": {
+                        "Terminate": {
+                            "type": "Terminate",
+                            "inputs": {
+                                "runStatus": "Succeeded"
+                            },
+                            "runAfter": {
+                                "Set_Request_Status_to_Rejected": [
+                                    "SUCCEEDED"
+                                ]
+                            }
+                        },
+                        "Set_Request_Status_to_Rejected": {
+                            "type": "Http",
+                            "inputs": {
+                                "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['organization']}/@{body('Project_Request')?['id']}?code=@{parameters('function_key')}",
+                                "method": "PATCH",
+                                "body": {
+                                    "status": "Rejected"
+                                }
+                            },
+                            "runtimeConfiguration": {
+                                "contentTransfer": {
+                                    "transferMode": "Chunked"
+                                }
+                            }
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Send_approval_email": [
+                        "SUCCEEDED"
+                    ]
                 }
             }
         },
