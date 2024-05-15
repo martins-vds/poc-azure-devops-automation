@@ -2,6 +2,7 @@ param poc_name string
 param project_request_queue_name string
 param location string = resourceGroup().location
 param reviewers string
+param send_email_as string
 
 var poc_name_sanitized = take(toLower(replace(replace(poc_name, '-', ''), ' ', '')), 10)
 var app_insights_name = poc_name_sanitized
@@ -78,9 +79,9 @@ resource office365_connection 'Microsoft.Web/connections@2016-06-01' = {
   name: 'office365'
   kind: 'V2'
   properties: {
-    displayName: 'vinima@microsoft.com'
+    displayName: send_email_as
     authenticatedUser: {
-      name: 'vinima@microsoft.com'
+      name: send_email_as
     }
     api: {
       displayName: 'Office 365 Outlook'

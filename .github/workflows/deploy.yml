@@ -205,7 +205,7 @@ jobs:
         subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
         resourceGroupName: ${{ vars.RG_NAME }}
         template: ./infra/logic-config.bicep
-        parameters: 'poc_name=${{ vars.POC_NAME }} project_request_queue_name=${{ needs.prod_deploy_infra.outputs.request_queue_name }} reviewers=${{ vars.REVIEWERS }}'
+        parameters: 'poc_name=${{ vars.POC_NAME }} project_request_queue_name=${{ needs.prod_deploy_infra.outputs.request_queue_name }} reviewers=${{ vars.REVIEWERS }} send_email_as=${{ vars.SEND_EMAIL_AS }}'
         failOnStdErr: false
         deploymentName: 'config-logic-app-${{ github.run_id }}'
         scope: 'resourcegroup'
