@@ -91,6 +91,20 @@ resource office365_connection 'Microsoft.Web/connections@2016-06-01' = {
       type: 'Microsoft.Web/locations/managedApis'
     }
   }
+
+  resource accessPolices 'accessPolicies@2016-06-01' = {
+    name: logic_app_name
+    location: location
+    properties: {
+      principal: {
+        type: 'ActiveDirectory'
+        identity: {
+          objectId: logic_app.identity.principalId
+          tenantId: subscription().tenantId
+        }
+      }
+    }
+  }
 }
 
 resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
