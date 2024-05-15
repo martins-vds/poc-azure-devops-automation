@@ -77,6 +77,7 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
 
 resource office365_connection 'Microsoft.Web/connections@2016-06-01' = {
   name: 'office365'
+  location: location
   kind: 'V2'
   properties: {
     displayName: send_email_as
