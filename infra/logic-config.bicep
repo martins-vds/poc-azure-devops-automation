@@ -78,7 +78,7 @@ resource office365_connection 'Microsoft.Web/connections@2016-06-01' = {
   name: 'office365'
   kind: 'V2'
   properties: {
-    displayName: 'office365'
+    displayName: 'vinima@microsoft.com'
     authenticatedUser: {
       name: 'vinima@microsoft.com'
     }

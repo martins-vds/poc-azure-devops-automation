@@ -35,11 +35,9 @@
     "value": "@appsetting('OFFICE365_CONNECTIONRUNTIMEURL')"
   },
   "office365-Authentication": {
-    "type": "Object",
+    "type": "object",
     "value": {
-      "type": "Raw",
-      "scheme": "Key",
-      "parameter": "@appsetting('OFFICE365_CONNECTIONKEY')"
+      "type": "ManagedServiceIdentity"
     }
   },
   "reviewers": {
