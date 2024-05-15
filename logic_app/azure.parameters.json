@@ -30,6 +30,18 @@
       }
     }
   },
+  "office365-ConnectionRuntimeUrl": {
+    "type": "String",
+    "value": "@appsetting('OFFICE365_CONNECTIONRUNTIMEURL')"
+  },
+  "office365-Authentication": {
+    "type": "Object",
+    "value": {
+      "type": "Raw",
+      "scheme": "Key",
+      "parameter": "@appsetting('OFFICE365_CONNECTIONKEY')"
+    }
+  },
   "reviewers": {
     "type": "String",
     "value": "@appsetting('REVIEWERS')"

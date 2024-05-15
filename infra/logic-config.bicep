@@ -74,6 +74,23 @@ resource project_request_queue_connection 'Microsoft.Web/connections@2016-06-01'
   }
 }
 
+resource office365_connection 'Microsoft.Web/connections@2016-06-01' = {
+  name: 'office365'
+  kind: 'V2'
+  properties: {
+    displayName: 'office365'
+    authenticatedUser: {
+      name: 'vinima@microsoft.com'
+    }
+    api: {
+      displayName: 'Office 365 Outlook'
+      description: 'Microsoft Office 365 is a cloud-based service that is designed to help meet your organization\'s needs for robust security, reliability, and user productivity.'
+      id: subscriptionResourceId('Microsoft.Web/locations/managedApis', location, 'office365')
+      type: 'Microsoft.Web/locations/managedApis'
+    }
+  }
+}
+
 resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
   parent: logic_app
   name: 'appsettings'
@@ -97,5 +114,7 @@ resource logic_app_settings 'Microsoft.Web/sites/config@2023-01-01' = {
     WORKFLOWS_RESOURCE_GROUP_NAME: resourceGroup().name
     WORKFLOWS_SUBSCRIPTION_ID: subscription().subscriptionId
     REVIEWERS: reviewers
+    OFFICE365_CONNECTIONRUNTIMEURL: office365_connection.properties.connectionRuntimeUrl
+    OFFICE365_CONNECTIONKEY: ''
   }
 }
