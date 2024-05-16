@@ -279,7 +279,7 @@
                         {
                             "equals": [
                                 "@body('Send_approval_email')?['SelectedOption']",
-                                "Approved"
+                                "Approve"
                             ]
                         }
                     ]
