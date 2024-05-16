@@ -131,7 +131,7 @@
                     }
                 },
                 "runAfter": {
-                    "Condition": [
+                    "Check_if_Project_Request_Was_Approved": [
                         "SUCCEEDED"
                     ]
                 },
@@ -267,12 +267,12 @@
                     "path": "/approvalmail/$subscriptions"
                 },
                 "runAfter": {
-                    "Project_Request": [
+                    "Check_if_Project_Request_is_Pending": [
                         "SUCCEEDED"
                     ]
                 }
             },
-            "Condition": {
+            "Check_if_Project_Request_Was_Approved": {
                 "type": "If",
                 "expression": {
                     "and": [
@@ -287,7 +287,7 @@
                 "actions": {},
                 "else": {
                     "actions": {
-                        "Terminate": {
+                        "Terminate_-_Project_Request_Rejected": {
                             "type": "Terminate",
                             "inputs": {
                                 "runStatus": "Succeeded"
@@ -317,6 +317,112 @@
                 },
                 "runAfter": {
                     "Send_approval_email": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Retrieve_Project_Request": {
+                "type": "Http",
+                "inputs": {
+                    "uri": "@{parameters('function_url')}/api/project-requests/@{body('Project_Request')?['organization']}/@{body('Project_Request')?['id']}?code=@{parameters('function_key')}",
+                    "method": "GET"
+                },
+                "runAfter": {
+                    "Project_Request": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "contentTransfer": {
+                        "transferMode": "Chunked"
+                    }
+                }
+            },
+            "Existing_Project_Request": {
+                "type": "ParseJson",
+                "inputs": {
+                    "content": "@body('Retrieve_Project_Request')",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "partitionKey": {
+                                "type": "string"
+                            },
+                            "rowKey": {
+                                "type": "string"
+                            },
+                            "id": {
+                                "type": "string"
+                            },
+                            "organization": {
+                                "type": "string"
+                            },
+                            "projectName": {
+                                "type": "string"
+                            },
+                            "processTemplateId": {
+                                "type": "string"
+                            },
+                            "status": {
+                                "type": "string"
+                            },
+                            "createdAt": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Retrieve_Project_Request": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Check_if_Project_Request_is_Pending": {
+                "type": "If",
+                "expression": {
+                    "and": [
+                        {
+                            "equals": [
+                                "@body('Existing_Project_Request')?['status']",
+                                "Pending"
+                            ]
+                        }
+                    ]
+                },
+                "actions": {},
+                "else": {
+                    "actions": {
+                        "Terminate_-_Project_Request_Already_Processed": {
+                            "type": "Terminate",
+                            "inputs": {
+                                "runStatus": "Cancelled"
+                            }
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Existing_Project_Request": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Delete_message_(V2)": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "azurequeues"
+                        }
+                    },
+                    "method": "delete",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent(parameters('azurequeues_storageAccountName')))}/queues/@{encodeURIComponent(parameters('azurequeues_queueName'))}/messages/@{encodeURIComponent(triggerBody()?['MessageId'])}",
+                    "queries": {
+                        "popreceipt": "@triggerBody()?['PopReceipt']"
+                    }
+                },
+                "runAfter": {
+                    "Complete_Request": [
                         "SUCCEEDED"
                     ]
                 }

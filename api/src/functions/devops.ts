@@ -93,6 +93,25 @@ async function projectRequests(request: HttpRequest, context: InvocationContext)
     };
 }
 
+async function getProjectRequest(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
+    const partitionKey = request.params.partitionKey;
+    const rowKey = request.params.rowKey;    
+
+    const projectRequestEntity = await tableClient.getEntity<ProjectRequest>(partitionKey, rowKey);
+
+    const { PartitionKey, RowKey, ...projectRequest } = projectRequestEntity;
+
+    if (!projectRequestEntity) {
+        return {
+            status: 404
+        };
+    }
+
+    return {
+        jsonBody: projectRequest
+    };
+}
+
 async function updateProjectRequest(request: HttpRequest, context: InvocationContext): Promise<HttpResponseInit> {
     const partitionKey = request.params.partitionKey;
     const rowKey = request.params.rowKey;
@@ -178,7 +197,14 @@ app.http('projectRequests', {
     authLevel: 'anonymous'
 });
 
-app.http('updateRequestProject', {
+app.http('getProjectRequest', {
+    methods: ['GET'],
+    route: 'project-requests/{partitionKey}/{rowKey}',
+    handler: getProjectRequest,
+    authLevel: 'function'
+});
+
+app.http('updateProjectRequest', {
     methods: ['PATCH'],
     route: 'project-requests/{partitionKey}/{rowKey}',
     handler: updateProjectRequest,
